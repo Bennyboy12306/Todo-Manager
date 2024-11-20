@@ -1,0 +1,44 @@
+﻿<Window x:Class="TodoManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Todo Manager"
+        Width="1920" Height="1080"
+        ResizeMode="NoResize">
+    <Grid>
+        <!-- Other UI components -->
+        <Grid Margin="0,100,0,100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="columnTodo" Width="620*" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="383*" />
+                <ColumnDefinition Width="237*"/>
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition x:Name="columnDone" Width="620*" />
+            </Grid.ColumnDefinitions>
+
+
+            <!-- Todo Column -->
+            <ScrollViewer x:Name="TodoScrollViewer" Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="10">
+                <StackPanel x:Name="TodoContainer" VerticalAlignment="Top">
+                    <TextBlock x:Name="TodoHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Todo" Foreground="Black" FontSize="50"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- In Progress Column -->
+            <ScrollViewer x:Name="InProgressScrollViewer" Grid.Column="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" Margin="10">
+                <StackPanel x:Name="InProgressContainer" VerticalAlignment="Top">
+                    <TextBlock x:Name="InProgressHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="In Progress" Foreground="Black" FontSize="50"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Done Column -->
+            <ScrollViewer x:Name="DoneScrollViewer" Grid.Column="5" VerticalScrollBarVisibility="Auto" Margin="10">
+                <StackPanel x:Name="DoneContainer" VerticalAlignment="Top">
+                    <TextBlock x:Name="DoneHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Done" Foreground="Black" FontSize="50"/>
+                </StackPanel>
+            </ScrollViewer>
+            
+        </Grid>
+        <Button x:Name="btnAddTodo" Content="Add Todo Item" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="63,964,0,0" Width="500" Height="80" Click="btnAddTodo_Click"/>
+    </Grid>
+</Window>

@@ -31,7 +31,7 @@
             </Rectangle>
 
             <ScrollViewer x:Name="TodoScrollViewer" Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
-              DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
+              DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop">
                 <StackPanel x:Name="TodoContainer" VerticalAlignment="Top">
                     <Border Background="Black" Padding="10" CornerRadius="10" HorizontalAlignment="Center" Height="100" Width="550">
                         <TextBlock x:Name="TodoHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Todo" Foreground="White" FontSize="50" Margin="0,0,0,25"/>
@@ -51,7 +51,7 @@
             </Rectangle>
 
             <ScrollViewer x:Name="InProgressScrollViewer" Grid.Column="3" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
-              DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
+              DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop">
                 <StackPanel x:Name="InProgressContainer" VerticalAlignment="Top">
                     <Border Background="Black" Padding="10" CornerRadius="10" HorizontalAlignment="Center" Height="100" Width="550">
                         <TextBlock x:Name="InProgressHeader" HorizontalAlignment="Center" VerticalAlignment="Center" Text="In Progress" Foreground="White" FontSize="50"/>
@@ -71,7 +71,7 @@
             </Rectangle>
 
             <ScrollViewer x:Name="DoneScrollViewer" Grid.Column="5" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
-              DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
+              DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop">
                 <StackPanel x:Name="DoneContainer" VerticalAlignment="Top">
                     <Border Background="Black" Padding="10" CornerRadius="10" HorizontalAlignment="Center" Height="100" Width="550">
                         <TextBlock x:Name="DoneHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Done" Foreground="White" FontSize="50" Margin="0,0,0,25"/>

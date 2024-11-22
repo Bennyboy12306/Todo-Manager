@@ -17,10 +17,6 @@
                 <TextBlock x:Name="DescriptionText" FontSize="14" Text="Default Description" />
             </StackPanel>
             <Button x:Name="MoveRightButton" Content="→" Grid.Column="2" VerticalAlignment="Center" Click="MoveRight_Click" />
-
-            <Button x:Name="MoveUpButton" Content="↑" Grid.Column="2" VerticalAlignment="Top" Click="MoveUp_Click"/>
-            <Button x:Name="MoveDownButton" Content="↓" Grid.Column="2" VerticalAlignment="Bottom" Click="MoveDown_Click"/>
-
         </Grid>
     </Border>
 </UserControl>

@@ -49,20 +49,12 @@ namespace TodoManager
 
         private void Column_DragEnter(object sender, DragEventArgs e)
         {
-            if (sender is ScrollViewer column)
+            // Ensure the dragged item is a TodoItemControl
+            if (!e.Data.GetDataPresent(typeof(TodoItemControl)))
             {
-                column.Background = new SolidColorBrush(Colors.LightBlue);
+                e.Effects = DragDropEffects.None;
             }
         }
-
-        private void Column_DragLeave(object sender, DragEventArgs e)
-        {
-            if (sender is ScrollViewer column)
-            {
-                column.Background = Brushes.Transparent;
-            }
-        }
-
 
         private void Column_DragOver(object sender, DragEventArgs e)
         {
@@ -79,41 +71,26 @@ namespace TodoManager
 
         private void Column_Drop(object sender, DragEventArgs e)
         {
-            if (sender is ScrollViewer column)
-            {
-                column.Background = Brushes.Transparent;
-            }
-
             if (e.Data.GetDataPresent(typeof(TodoItemControl)))
             {
+                // Get the dragged item
                 TodoItemControl draggedItem = (TodoItemControl)e.Data.GetData(typeof(TodoItemControl));
 
-                if (draggedItem.Parent is StackPanel currentContainer)
+                // Remove the item from its current parent
+                StackPanel currentParent = draggedItem.Parent as StackPanel;
+                if (currentParent != null)
                 {
-                    currentContainer.Children.Remove(draggedItem);
+                    currentParent.Children.Remove(draggedItem);
                 }
 
-                if (((ScrollViewer)sender).Content is StackPanel targetContainer)
+                // Add the item to the target container
+                StackPanel targetContainer = ((ScrollViewer)sender).Content as StackPanel;
+                if (targetContainer != null)
                 {
-                    Point dropPosition = e.GetPosition(targetContainer);
-                    int insertIndex = 0;
-
-                    for (int i = 0; i < targetContainer.Children.Count; i++)
-                    {
-                        FrameworkElement child = targetContainer.Children[i] as FrameworkElement;
-                        if (child != null && dropPosition.Y < child.TransformToAncestor(targetContainer).Transform(new Point(0, 0)).Y + child.ActualHeight / 2)
-                        {
-                            insertIndex = i;
-                            break;
-                        }
-                    }
-
-                    targetContainer.Children.Insert(insertIndex, draggedItem);
-                    draggedItem.UpdateButtonStates();
+                    targetContainer.Children.Add(draggedItem);
                 }
             }
         }
-
 
     }
 }

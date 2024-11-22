@@ -34,22 +34,15 @@ namespace TodoManager
         // Update button states (enable/disable based on current container)
         public void UpdateButtonStates()
         {
-            if (Parent is StackPanel container)
-            {
-                int currentIndex = container.Children.IndexOf(this);
-                MoveUpButton.IsEnabled = currentIndex > 0;
-                MoveDownButton.IsEnabled = currentIndex < container.Children.Count - 1;
-            }
-
             if (Parent == TodoContainer)
             {
-                MoveLeftButton.IsEnabled = false;
+                MoveLeftButton.IsEnabled = false; // Cannot move left
                 MoveRightButton.IsEnabled = true;
             }
             else if (Parent == DoneContainer)
             {
                 MoveLeftButton.IsEnabled = true;
-                MoveRightButton.IsEnabled = false;
+                MoveRightButton.IsEnabled = false; // Cannot move right
             }
             else
             {
@@ -143,34 +136,5 @@ namespace TodoManager
 
             UpdateButtonStates();
         }
-
-        private void MoveUp_Click(object sender, RoutedEventArgs e)
-        {
-            if (Parent is StackPanel container)
-            {
-                int currentIndex = container.Children.IndexOf(this);
-                if (currentIndex > 0)
-                {
-                    container.Children.Remove(this);
-                    container.Children.Insert(currentIndex - 1, this);
-                }
-                UpdateButtonStates();
-            }
-        }
-
-        private void MoveDown_Click(object sender, RoutedEventArgs e)
-        {
-            if (Parent is StackPanel container)
-            {
-                int currentIndex = container.Children.IndexOf(this);
-                if (currentIndex < container.Children.Count - 1)
-                {
-                    container.Children.Remove(this);
-                    container.Children.Insert(currentIndex + 1, this);
-                }
-                UpdateButtonStates();
-            }
-        }
-
     }
 }

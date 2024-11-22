@@ -34,34 +34,27 @@ namespace TodoManager
         // Update button states (enable/disable based on current container)
         public void UpdateButtonStates()
         {
-            if (Parent is StackPanel parentPanel)
+            if (Parent is StackPanel container)
             {
-                // Get all the items in the container (excluding headers)
-                var siblings = parentPanel.Children.OfType<TodoItemControl>().ToList();
+                int currentIndex = container.Children.IndexOf(this);
+                MoveUpButton.IsEnabled = currentIndex > 0;
+                MoveDownButton.IsEnabled = currentIndex < container.Children.Count - 1;
+            }
 
-                // Find the current position of this item within its container
-                int currentIndex = siblings.IndexOf(this);
-
-                // Enable or disable the MoveLeftButton and MoveRightButton based on the container
-                if (parentPanel.Name == "TodoContainer")
-                {
-                    MoveLeftButton.IsEnabled = false; // Cannot move left
-                    MoveRightButton.IsEnabled = true;
-                }
-                else if (parentPanel.Name == "DoneContainer")
-                {
-                    MoveLeftButton.IsEnabled = true;
-                    MoveRightButton.IsEnabled = false; // Cannot move right
-                }
-                else
-                {
-                    MoveLeftButton.IsEnabled = true;
-                    MoveRightButton.IsEnabled = true;
-                }
-
-                // Enable or disable the MoveUpButton and MoveDownButton based on position
-                MoveUpButton.IsEnabled = currentIndex > 0; // Disable if it's the first item
-                MoveDownButton.IsEnabled = currentIndex < siblings.Count - 1; // Disable if it's the last item
+            if (Parent == TodoContainer)
+            {
+                MoveLeftButton.IsEnabled = false;
+                MoveRightButton.IsEnabled = true;
+            }
+            else if (Parent == DoneContainer)
+            {
+                MoveLeftButton.IsEnabled = true;
+                MoveRightButton.IsEnabled = false;
+            }
+            else
+            {
+                MoveLeftButton.IsEnabled = true;
+                MoveRightButton.IsEnabled = true;
             }
         }
 
@@ -156,7 +149,7 @@ namespace TodoManager
             if (Parent is StackPanel container)
             {
                 int currentIndex = container.Children.IndexOf(this);
-                if (currentIndex > 1) // Prevent moving above the header
+                if (currentIndex > 0)
                 {
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex - 1, this);

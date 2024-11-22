@@ -58,10 +58,6 @@ namespace TodoManager
                     MoveLeftButton.IsEnabled = true;
                     MoveRightButton.IsEnabled = true;
                 }
-
-                // Enable or disable the MoveUpButton and MoveDownButton based on position
-                MoveUpButton.IsEnabled = currentIndex > 0; // Disable if it's the first item
-                MoveDownButton.IsEnabled = currentIndex < siblings.Count - 1; // Disable if it's the last item
             }
         }
 

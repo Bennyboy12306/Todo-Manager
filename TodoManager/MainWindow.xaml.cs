@@ -88,28 +88,28 @@ namespace TodoManager
             {
                 TodoItemControl draggedItem = (TodoItemControl)e.Data.GetData(typeof(TodoItemControl));
 
+                // Check if draggedItem's Parent is a StackPanel
                 if (draggedItem.Parent is StackPanel currentContainer)
                 {
-                    currentContainer.Children.Remove(draggedItem);
-                }
-
-                if (((ScrollViewer)sender).Content is StackPanel targetContainer)
-                {
-                    Point dropPosition = e.GetPosition(targetContainer);
-                    int insertIndex = 0;
-
-                    for (int i = 0; i < targetContainer.Children.Count; i++)
+                    // Check if the sender's Content is a StackPanel
+                    if (((ScrollViewer)sender).Content is StackPanel targetContainer)
                     {
-                        FrameworkElement child = targetContainer.Children[i] as FrameworkElement;
-                        if (child != null && dropPosition.Y < child.TransformToAncestor(targetContainer).Transform(new Point(0, 0)).Y + child.ActualHeight / 2)
+                        // Abort if the current and target containers are the same
+                        if (currentContainer == targetContainer)
                         {
-                            insertIndex = i;
-                            break;
+                            return;
                         }
-                    }
 
-                    targetContainer.Children.Insert(insertIndex, draggedItem);
-                    draggedItem.UpdateButtonStates();
+                        // Remove the dragged item from the current container
+                        currentContainer.Children.Remove(draggedItem);
+
+                        Point dropPosition = e.GetPosition(targetContainer);
+                        int insertIndex = targetContainer.Children.Count;
+
+                        // Insert dragged item into the target container
+                        targetContainer.Children.Insert(insertIndex, draggedItem);
+                        draggedItem.UpdateButtonStates();
+                    }
                 }
             }
         }

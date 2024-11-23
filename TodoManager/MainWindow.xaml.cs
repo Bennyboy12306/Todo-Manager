@@ -41,9 +41,6 @@ namespace TodoManager
             // Add the new control to the Todo container
             TodoContainer.Children.Add(newTodoItem);
 
-            // Initialize button states
-            newTodoItem.UpdateButtonStates();
-
             items++;
         }
 
@@ -51,7 +48,7 @@ namespace TodoManager
         {
             if (sender is ScrollViewer column)
             {
-                column.Background = new SolidColorBrush(Colors.LightBlue);
+                column.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF610000"));
             }
         }
 
@@ -108,7 +105,6 @@ namespace TodoManager
 
                         // Insert dragged item into the target container
                         targetContainer.Children.Insert(insertIndex, draggedItem);
-                        draggedItem.UpdateButtonStates();
                     }
                 }
             }

@@ -31,36 +31,6 @@ namespace TodoManager
             InitializeComponent();
         }
 
-        // Update button states (enable/disable based on current container)
-        public void UpdateButtonStates()
-        {
-            if (Parent is StackPanel parentPanel)
-            {
-                // Get all the items in the container (excluding headers)
-                var siblings = parentPanel.Children.OfType<TodoItemControl>().ToList();
-
-                // Find the current position of this item within its container
-                int currentIndex = siblings.IndexOf(this);
-
-                // Enable or disable the MoveLeftButton and MoveRightButton based on the container
-                if (parentPanel.Name == "TodoContainer")
-                {
-                    MoveLeftButton.IsEnabled = false; // Cannot move left
-                    MoveRightButton.IsEnabled = true;
-                }
-                else if (parentPanel.Name == "DoneContainer")
-                {
-                    MoveLeftButton.IsEnabled = true;
-                    MoveRightButton.IsEnabled = false; // Cannot move right
-                }
-                else
-                {
-                    MoveLeftButton.IsEnabled = true;
-                    MoveRightButton.IsEnabled = true;
-                }
-            }
-        }
-
         private void Column_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(TodoItemControl)))
@@ -78,9 +48,6 @@ namespace TodoManager
                 {
                     targetContainer.Children.Add(draggedItem);
                 }
-
-                // Update button states
-                draggedItem.UpdateButtonStates();
             }
         }
 
@@ -125,8 +92,6 @@ namespace TodoManager
                 DoneContainer.Children.Remove(this);
                 InProgressContainer.Children.Add(this);
             }
-
-            UpdateButtonStates();
         }
 
         private void MoveRight_Click(object sender, RoutedEventArgs e)
@@ -143,8 +108,6 @@ namespace TodoManager
                 InProgressContainer.Children.Remove(this);
                 DoneContainer.Children.Add(this);
             }
-
-            UpdateButtonStates();
         }
 
         private void MoveUp_Click(object sender, RoutedEventArgs e)
@@ -157,7 +120,6 @@ namespace TodoManager
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex - 1, this);
                 }
-                UpdateButtonStates();
             }
         }
 
@@ -171,7 +133,6 @@ namespace TodoManager
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex + 1, this);
                 }
-                UpdateButtonStates();
             }
         }
 

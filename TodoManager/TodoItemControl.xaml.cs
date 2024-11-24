@@ -136,5 +136,12 @@ namespace TodoManager
             }
         }
 
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (Parent is StackPanel container)
+            {
+                container.Children.Remove(this);
+            }
+        }
     }
 }

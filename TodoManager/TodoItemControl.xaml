@@ -46,8 +46,7 @@
                                 <Setter Property="Background" TargetName="border" Value="#FF610000"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                                <Setter Property="Background" TargetName="border" Value="#000"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
@@ -74,7 +73,11 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <Button Style="{DynamicResource ButtonStyle}" x:Name="MoveLeftButton" Content="←" Grid.Column="0" VerticalAlignment="Center" Click="MoveLeft_Click" BorderBrush="#FF610000" Background="#FF323232" Foreground="White" />
+            <Button x:Name="MoveUpButt1on" Content="↑" Grid.Column="0" VerticalAlignment="Top" Click="MoveUp_Click" BorderBrush="#FF610000" Background="#FF323232" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
+
+            <Button x:Name="MoveLeftButton" Content="←" Grid.Column="0" VerticalAlignment="Center" Click="MoveLeft_Click" BorderBrush="#FF610000" Background="#FF323232" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
+
+            <Button x:Name="DeleteButton" Content="X" Grid.Column="0" VerticalAlignment="Bottom" Click="Delete_Click" BorderBrush="#FF610000" Background="#FF610000" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" Height="68">
                 <TextBlock x:Name="TitleText" FontSize="18" FontWeight="Bold" Text="Default Title" Foreground="White" />

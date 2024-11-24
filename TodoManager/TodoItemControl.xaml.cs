@@ -1,24 +1,69 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace TodoManager
 {
-    public partial class TodoItemControl : UserControl
+    public partial class TodoItemControl : UserControl, INotifyPropertyChanged
     {
         private Point dragStartPoint;
 
-        // Public properties for Title and Description
+        public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(TodoItemControl), new PropertyMetadata(false));
+
+        public bool IsEditing
+        {
+            get => (bool)GetValue(IsEditingProperty);
+            set => SetValue(IsEditingProperty, value);
+        }
+
+
+        private string title;
+        private string description;
+        private DateTime? startDate;
+        private DateTime? endDate;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Public properties for binding
         public string Title
         {
-            get => TitleText.Text;
-            set => TitleText.Text = value;
+            get => title;
+            set
+            {
+                title = value;
+                OnPropertyChanged(nameof(Title));
+            }
         }
 
         public string Description
         {
-            get => DescriptionText.Text;
-            set => DescriptionText.Text = value;
+            get => description;
+            set
+            {
+                description = value;
+                OnPropertyChanged(nameof(Description));
+            }
+        }
+
+        public DateTime? StartDate
+        {
+            get => startDate;
+            set
+            {
+                startDate = value;
+                OnPropertyChanged(nameof(StartDate));
+            }
+        }
+
+        public DateTime? EndDate
+        {
+            get => endDate;
+            set
+            {
+                endDate = value;
+                OnPropertyChanged(nameof(EndDate));
+            }
         }
 
         // References to the parent containers
@@ -29,6 +74,13 @@ namespace TodoManager
         public TodoItemControl()
         {
             InitializeComponent();
+            DataContext = this;
+            startDate = DateTime.Now;
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void Column_Drop(object sender, DragEventArgs e)
@@ -60,11 +112,24 @@ namespace TodoManager
             }
         }
 
+        private void GotFocus(object sender, RoutedEventArgs e)
+        {
+            IsEditing = true; // User is editing
+        }
+
+        private void LostFocus(object sender, RoutedEventArgs e)
+        {
+            IsEditing = false; // User finished editing
+        }
+
         // Start the drag-and-drop operation on mouse move
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
+            if (IsEditing) return;
+
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+
                 Point currentPoint = e.GetPosition(this);
 
                 // Check if the movement is sufficient to start a drag

@@ -80,13 +80,18 @@
             <Button x:Name="DeleteButton" Content="X" Grid.Column="0" VerticalAlignment="Bottom" Click="Delete_Click" BorderBrush="#FF610000" Background="#FF610000" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,0" Height="68">
-                <TextBlock x:Name="TitleText" FontSize="18" FontWeight="Bold" Text="Default Title" Foreground="White" />
-                <TextBlock x:Name="DescriptionText" FontSize="14" Text="Default Description" Foreground="White" />
+                <!-- Editable Title -->
+                <TextBox x:Name="TitleText" FontSize="18" FontWeight="Bold" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Background="Transparent" BorderBrush="Transparent" GotFocus="GotFocus" LostFocus="LostFocus"/>
+
+                <!-- Editable Description -->
+                <TextBox x:Name="DescriptionText" FontSize="14" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Background="Transparent" BorderBrush="Transparent" GotFocus="GotFocus" LostFocus="LostFocus"/>
+
+                <!-- Editable Dates -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontSize="10" Text="Started: " Foreground="White"/>
-                    <TextBlock x:Name="StartDateText" FontSize="10" Text="DD/MM/YYYY" Foreground="White" />
+                    <DatePicker x:Name="StartDatePicker" FontSize="10" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" Background="Transparent" BorderBrush="Transparent" GotFocus="GotFocus" LostFocus="LostFocus"/>
                     <TextBlock FontSize="10" Text="Completed: " Foreground="White" Margin="25,0,0,0"/>
-                    <TextBlock x:Name="EndDateText" FontSize="10" Text="DD/MM/YYYY" Foreground="White" />
+                    <DatePicker x:Name="EndDatePicker" FontSize="10" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" Background="Transparent" BorderBrush="Transparent" GotFocus="GotFocus" LostFocus="LostFocus"/>
                 </StackPanel>
             </StackPanel>
 

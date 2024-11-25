@@ -26,6 +26,7 @@ namespace TodoManager
         {
             InitializeComponent();
             src.Board board = manager.getBoards()[0];
+            loadAllItems();
         }
 
         private void btnAddTodo_Click(object sender, RoutedEventArgs e)
@@ -42,6 +43,9 @@ namespace TodoManager
                 EndDate = null
             };
 
+            // Subscribe to the ItemMoved event
+            newTodoItem.ItemMoved += saveAllItems;
+
             // Add the new control to the Todo container
             TodoContainer.Children.Add(newTodoItem);
 
@@ -53,16 +57,14 @@ namespace TodoManager
         private void saveAllItems()
         {
             string fileName = "Root.csv"; // Specify the file name
-            string outputPath = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = @"D:\" + fileName; // Specify the output path (change as needed)
 
-            using (StreamWriter writer = new StreamWriter(outputPath))
+            using (StreamWriter writer = new StreamWriter(path))
             {
                 saveContainerContents(TodoContainer, "Todo", writer);
                 saveContainerContents(InProgressContainer, "InProgress", writer);
                 saveContainerContents(DoneContainer, "Done", writer);
             }
-
-            Console.WriteLine("All items have been saved to " + outputPath);
         }
 
         private void saveContainerContents(Panel container, string containerName, StreamWriter writer)
@@ -75,6 +77,70 @@ namespace TodoManager
                     writer.WriteLine(containerName + "," + todoItem.Title + "," + todoItem.Description + "," + todoItem.StartDate + "," + endDateFormatted);
                 }
             }
+        }
+
+        private void loadAllItems()
+        {
+
+            string fileName = "Root.csv"; // Specify the file name
+            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            using (StreamReader reader = new StreamReader(path))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] parts = line.Split(",");
+                    if (parts.Length == 5)
+                    {
+                        string containerName = parts[0];
+                        string title = parts[1];
+                        string description = parts[2];
+                        DateTime startDate = DateTime.Parse(parts[3]);
+                        DateTime? endDate = parts[4] == "Ongoing" ? (DateTime?)null : DateTime.Parse(parts[4]);
+
+                        loadContainerContents(containerName, title, description, startDate, endDate);
+                    }
+                }
+            }
+
+        }
+
+        private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate)
+        {
+
+            TodoItemControl newTodoItem = new TodoItemControl
+            {
+                Title = title,
+                Description = description,
+                StartDate = startDate,
+                EndDate = endDate,
+                TodoContainer = TodoContainer,
+                InProgressContainer = InProgressContainer,
+                DoneContainer = DoneContainer
+            };
+
+            // Subscribe to the ItemMoved event
+            newTodoItem.ItemMoved += saveAllItems;
+
+            Panel targetContainer = ContainerName switch
+            {
+                "Todo" => TodoContainer,
+                "InProgress" => InProgressContainer,
+                "Done" => DoneContainer,
+                _ => null
+            };
+
+            if (targetContainer != null)
+            {
+                targetContainer.Children.Add(newTodoItem);
+            }
+
         }
 
         private void Column_DragEnter(object sender, DragEventArgs e)

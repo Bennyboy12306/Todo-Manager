@@ -7,6 +7,8 @@ namespace TodoManager
 {
     public partial class TodoItemControl : UserControl, INotifyPropertyChanged
     {
+        public event Action ItemMoved;
+
         private Point dragStartPoint;
 
         public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(TodoItemControl), new PropertyMetadata(false));
@@ -149,12 +151,16 @@ namespace TodoManager
                 // Move to Todo
                 InProgressContainer.Children.Remove(this);
                 TodoContainer.Children.Add(this);
+                // Notify listeners
+                ItemMoved?.Invoke();
             }
             else if (this.Parent == DoneContainer)
             {
                 // Move to In Progress
                 DoneContainer.Children.Remove(this);
                 InProgressContainer.Children.Add(this);
+                // Notify listeners
+                ItemMoved?.Invoke();
             }
         }
 
@@ -165,12 +171,16 @@ namespace TodoManager
                 // Move to In Progress
                 TodoContainer.Children.Remove(this);
                 InProgressContainer.Children.Add(this);
+                // Notify listeners
+                ItemMoved?.Invoke();
             }
             else if (this.Parent == InProgressContainer)
             {
                 // Move to Done
                 InProgressContainer.Children.Remove(this);
                 DoneContainer.Children.Add(this);
+                // Notify listeners
+                ItemMoved?.Invoke();
             }
         }
 
@@ -183,6 +193,8 @@ namespace TodoManager
                 {
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex - 1, this);
+                    // Notify listeners
+                    ItemMoved?.Invoke();
                 }
             }
         }
@@ -196,6 +208,8 @@ namespace TodoManager
                 {
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex + 1, this);
+                    // Notify listeners
+                    ItemMoved?.Invoke();
                 }
             }
         }
@@ -205,6 +219,8 @@ namespace TodoManager
             if (Parent is StackPanel container)
             {
                 container.Children.Remove(this);
+                // Notify listeners
+                ItemMoved?.Invoke();
             }
         }
     }

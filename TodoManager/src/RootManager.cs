@@ -13,7 +13,7 @@ namespace TodoManager.src
         public RootManager() 
         {
             //Debug
-            boards.Add(new Board(0, "Test", "Test"));
+            boards.Add(new Board(0, "Root", "Root"));
         }
 
         public List<Board> getBoards()

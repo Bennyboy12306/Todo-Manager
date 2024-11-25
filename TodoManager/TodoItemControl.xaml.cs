@@ -75,7 +75,6 @@ namespace TodoManager
         {
             InitializeComponent();
             DataContext = this;
-            startDate = DateTime.Now;
         }
 
         protected void OnPropertyChanged(string propertyName)

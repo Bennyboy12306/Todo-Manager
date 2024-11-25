@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Printing;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TodoManager.src;
+using System.IO;
 
 namespace TodoManager
 {
@@ -35,13 +37,44 @@ namespace TodoManager
                 Description = "Description of the item",
                 TodoContainer = TodoContainer,
                 InProgressContainer = InProgressContainer,
-                DoneContainer = DoneContainer
+                DoneContainer = DoneContainer,
+                StartDate = DateTime.Now,
+                EndDate = null
             };
 
             // Add the new control to the Todo container
             TodoContainer.Children.Add(newTodoItem);
 
+            saveAllItems();
+
             items++;
+        }
+
+        private void saveAllItems()
+        {
+            string fileName = "Root.csv"; // Specify the file name
+            string outputPath = @"D:\" + fileName; // Specify the output path (change as needed)
+
+            using (StreamWriter writer = new StreamWriter(outputPath))
+            {
+                saveContainerContents(TodoContainer, "Todo", writer);
+                saveContainerContents(InProgressContainer, "InProgress", writer);
+                saveContainerContents(DoneContainer, "Done", writer);
+            }
+
+            Console.WriteLine("All items have been saved to " + outputPath);
+        }
+
+        private void saveContainerContents(Panel container, string containerName, StreamWriter writer)
+        {
+            foreach (var child in container.Children)
+            {
+                if (child is TodoItemControl todoItem)
+                {
+                    string endDateFormatted = todoItem.EndDate?.ToString() ?? "Ongoing";
+                    writer.WriteLine(containerName + "," + todoItem.Title + "," + todoItem.Description + "," + todoItem.StartDate + "," + endDateFormatted);
+                }
+            }
         }
 
         private void Column_DragEnter(object sender, DragEventArgs e)
@@ -105,6 +138,8 @@ namespace TodoManager
 
                         // Insert dragged item into the target container
                         targetContainer.Children.Insert(insertIndex, draggedItem);
+
+                        saveAllItems();
                     }
                 }
             }

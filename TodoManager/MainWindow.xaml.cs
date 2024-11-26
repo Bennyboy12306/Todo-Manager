@@ -211,6 +211,9 @@ namespace TodoManager
             }
         }
 
-
+        private void btnAddBoard_Click(object sender, RoutedEventArgs e)
+        {
+            manager.addBoard("Temp", false);
+        }
     }
 }

@@ -101,7 +101,7 @@
         </Rectangle>
 
         <Button x:Name="btnAddTodo"
-        Content="Add Todo Item"
+        Content="Add New Item"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Margin="30,988,0,0"
@@ -136,5 +136,31 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
+        <Button x:Name="btnAddBoard"
+            Content="Add New Board"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="1289,988,0,0"
+            Width="600"
+            Height="50"
+            Click="btnAddBoard_Click"
+            Foreground="White">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" Background="#FF8D8D8D"
+                        CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="#333333" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Window>

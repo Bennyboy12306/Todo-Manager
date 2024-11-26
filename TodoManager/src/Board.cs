@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace TodoManager.src
 {
-    class Board : Item
+    class Board
     {
-        public Board(int id) : base(id)
+        public string name;
+        public bool active;
+
+        public Board(string name, bool active)
         {
+            this.name = name;
+            this.active = active;
         }
 
-        public Board(int id, string name, string description) : base(id, name, description)
-        {
-        }
+        public string Name { get { return name; } }
+
+        public bool Active { get { return active; } }
     }
 }

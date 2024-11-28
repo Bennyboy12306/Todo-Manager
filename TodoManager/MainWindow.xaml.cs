@@ -20,12 +20,13 @@ namespace TodoManager
     public partial class MainWindow : Window
     {
         private src.RootManager manager = new src.RootManager();
+        private string displayedBoard;
 
         private int items = 0;
         public MainWindow()
         {
             InitializeComponent();
-            src.Board board = manager.getBoards()[0];
+            displayedBoard = manager.ActiveBoard;
             loadAllItems();
         }
 
@@ -56,7 +57,7 @@ namespace TodoManager
 
         private void saveAllItems()
         {
-            string fileName = "Root.csv"; // Specify the file name
+            string fileName = displayedBoard + ".csv"; // Specify the file name
             string path = @"D:\" + fileName; // Specify the output path (change as needed)
 
             using (StreamWriter writer = new StreamWriter(path))
@@ -82,7 +83,7 @@ namespace TodoManager
         private void loadAllItems()
         {
 
-            string fileName = "Root.csv"; // Specify the file name
+            string fileName = displayedBoard + ".csv"; // Specify the file name
             string path = @"D:\" + fileName; // Specify the output path (change as needed)
 
             if (!File.Exists(path))
@@ -214,6 +215,7 @@ namespace TodoManager
         private void btnAddBoard_Click(object sender, RoutedEventArgs e)
         {
             manager.addBoard("Temp", false);
+            manager.saveBoardList();
         }
     }
 }

@@ -1,46 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.IO;
 
 namespace TodoManager.src
 {
     internal class RootManager
     {
-        private List<Board> boards = new List<Board>();
+        private Dictionary<string, bool> boards = new Dictionary<string, bool>();
+        private string activeBoard = string.Empty;
 
         public RootManager() 
         {
             loadBoards();
             if (boards.Count == 0) //Add Root Board if no boards are loaded
             {
-                boards.Add(new Board("Root", true));
+                addBoard("Root", true);
+                saveBoardList();
+                activeBoard = "Root";
             }
         }
 
-        public List<Board> getBoards()
+        public string ActiveBoard
+        { 
+            get { return activeBoard; } 
+        }
+
+        public Dictionary<string, bool> getBoards()
         {
             return boards; 
         }
 
         public void addBoard(string name, bool active)
         {
-            boards.Add(new Board(name, active));
-            saveBoards();
+            boards[name] = active;
         }
-        private void saveBoards()
+
+        public void saveBoardList()
         {
             string fileName = "Boards.csv"; // Specify the file name
             string path = @"D:\" + fileName; // Specify the output path (change as needed)
 
             using (StreamWriter writer = new StreamWriter(path))
             {
-                foreach (Board board in boards)
+                foreach (var board in boards)
                 {
-                    writer.WriteLine(board.Name + "," + board.Active);
+                    string name = board.Key;
+                    bool active = board.Value;
+                    writer.WriteLine(name + "," + active);
                 }
             }
         }
@@ -48,7 +52,7 @@ namespace TodoManager.src
         private void loadBoards()
         {
 
-            string fileName = "Root.csv"; // Specify the file name
+            string fileName = "Boards.csv"; // Specify the file name
             string path = @"D:\" + fileName; // Specify the output path (change as needed)
 
             if (!File.Exists(path))
@@ -64,12 +68,25 @@ namespace TodoManager.src
                     string[] parts = line.Split(",");
                     if (parts.Length == 2)
                     {
+                        string boardName = parts[0];
                         bool activeFormatted = bool.Parse(parts[1]);
-                        addBoard(parts[0], activeFormatted);
+                        if (activeFormatted)
+                        {
+                            activeBoard = boardName;
+                        }
+                        addBoard(boardName, activeFormatted);
                     }
                 }
             }
+            saveBoardList();
 
+        }
+
+        public void markActiveBoard(string newActiveBoard)
+        {
+            boards[activeBoard] = false; // Reset old active boards active value
+            boards[newActiveBoard] = true; // Set new active boards active value
+            saveBoardList(); // Save boards list
         }
     }
 }

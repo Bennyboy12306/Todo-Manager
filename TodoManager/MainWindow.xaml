@@ -6,9 +6,42 @@
         Width="1920"
         Height="1080"
         SizeToContent="WidthAndHeight"
-        >
+        
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Grid Width="1920" Height="1080" Background="#FF8D8D8D">
+        <Rectangle HorizontalAlignment="Center" Height="200" VerticalAlignment="Top" Width="1920">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FF585858" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
         <Grid Margin="0,100,0,100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition x:Name="columnTodoLabel" Width="600*" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition x:Name="columnInProgressLabel" Width="600*" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition x:Name="columnDoneLabel" Width="600*" />
+                <ColumnDefinition Width="30" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1" Background="Black" Padding="10" CornerRadius="10" VerticalAlignment="Top" Height="80" Width="600">
+                <TextBlock x:Name="TodoHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Todo" Foreground="White" FontSize="45"/>
+            </Border>
+
+            <Border Grid.Column="3" Background="Black" Padding="10" CornerRadius="10" VerticalAlignment="Top" Height="80" Width="600">
+                <TextBlock x:Name="InProgressHeader" HorizontalAlignment="Center" VerticalAlignment="Center" Text="In Progress" Foreground="White" FontSize="45"/>
+            </Border>
+
+            <Border Grid.Column="5" Background="Black" Padding="10" CornerRadius="10" VerticalAlignment="Top" Height="80" Width="600">
+                <TextBlock x:Name="DoneHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Done" Foreground="White" FontSize="45"/>
+            </Border>
+
+        </Grid>
+        <Grid Margin="0,200,0,100">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30" />
                 <ColumnDefinition x:Name="columnTodo" Width="600*" />
@@ -19,7 +52,7 @@
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
 
-            <Rectangle Grid.Column="0" HorizontalAlignment="Center" Height="880" VerticalAlignment="Center" Width="30">
+            <Rectangle HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0.5"/>
@@ -33,13 +66,10 @@
             <ScrollViewer x:Name="TodoScrollViewer" Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
               DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
                 <StackPanel x:Name="TodoContainer" VerticalAlignment="Top">
-                    <Border Background="Black" Padding="10" CornerRadius="10" HorizontalAlignment="Center" Height="100" Width="550">
-                        <TextBlock x:Name="TodoHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Todo" Foreground="White" FontSize="50" Margin="0,0,0,25"/>
-                    </Border>
                 </StackPanel>
             </ScrollViewer>
 
-            <Rectangle Grid.Column="2" HorizontalAlignment="Center" Height="880" VerticalAlignment="Center" Width="30">
+            <Rectangle Grid.Column="2" HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0.5"/>
@@ -53,13 +83,10 @@
             <ScrollViewer x:Name="InProgressScrollViewer" Grid.Column="3" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
               DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
                 <StackPanel x:Name="InProgressContainer" VerticalAlignment="Top">
-                    <Border Background="Black" Padding="10" CornerRadius="10" HorizontalAlignment="Center" Height="100" Width="550">
-                        <TextBlock x:Name="InProgressHeader" HorizontalAlignment="Center" VerticalAlignment="Center" Text="In Progress" Foreground="White" FontSize="50"/>
-                    </Border>
                 </StackPanel>
             </ScrollViewer>
 
-            <Rectangle Grid.Column="4" HorizontalAlignment="Center" Height="880" VerticalAlignment="Center" Width="30">
+            <Rectangle Grid.Column="4" HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0.5"/>
@@ -73,13 +100,10 @@
             <ScrollViewer x:Name="DoneScrollViewer" Grid.Column="5" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
               DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
                 <StackPanel x:Name="DoneContainer" VerticalAlignment="Top">
-                    <Border Background="Black" Padding="10" CornerRadius="10" HorizontalAlignment="Center" Height="100" Width="550">
-                        <TextBlock x:Name="DoneHeader" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Done" Foreground="White" FontSize="50" Margin="0,0,0,25"/>
-                    </Border>
                 </StackPanel>
             </ScrollViewer>
 
-            <Rectangle Grid.Column="6" HorizontalAlignment="Center" Height="880" VerticalAlignment="Center" Width="30">
+            <Rectangle Grid.Column="6" HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0.5"/>
@@ -126,16 +150,6 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-
-
-        <Rectangle HorizontalAlignment="Center" Height="100" VerticalAlignment="Top" Width="1920">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black"/>
-                    <GradientStop Color="#FF585858" Offset="1"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
         <Button x:Name="btnAddBoard"
             Content="Add New Board"
             HorizontalAlignment="Left"
@@ -162,6 +176,6 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="30,39,0,0" VerticalAlignment="Top" Width="200" Height="37" SelectionChanged="cbbBoardSelect_SelectionChanged"/>
+        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" Width="300" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
     </Grid>
 </Window>

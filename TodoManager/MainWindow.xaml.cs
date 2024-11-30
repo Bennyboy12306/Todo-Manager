@@ -23,11 +23,36 @@ namespace TodoManager
         private string displayedBoard;
 
         private int items = 0;
+
+        private bool startupFinished = false;
         public MainWindow()
         {
             InitializeComponent();
             displayedBoard = manager.ActiveBoard;
             loadAllItems();
+            updateBoardSelector();
+            startupFinished = true;
+        }
+
+        private void updateBoardSelector()
+        {
+            cbbBoardSelect.Items.Clear();
+
+            Dictionary<string, bool> boards = manager.getBoards();
+
+            foreach (var board in boards)
+            {
+                string boardName = board.Key;
+                bool active = board.Value;
+
+                cbbBoardSelect.Items.Add(boardName);
+
+                if (active)
+                {
+                    cbbBoardSelect.SelectedItem = boardName;
+                }
+            }
+            
         }
 
         private void btnAddTodo_Click(object sender, RoutedEventArgs e)
@@ -216,6 +241,30 @@ namespace TodoManager
         {
             manager.addBoard("Temp", false);
             manager.saveBoardList();
+            updateBoardSelector();
+        }
+
+        private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (startupFinished)
+            {
+                switchActiveBoard();
+            }
+        }
+
+        private void switchActiveBoard()
+        {
+            saveAllItems();
+            TodoContainer.Children.Clear();
+            InProgressContainer.Children.Clear();
+            DoneContainer.Children.Clear();
+
+            // Update the active board
+            displayedBoard = cbbBoardSelect.SelectedItem.ToString();
+            manager.markActiveBoard(displayedBoard);
+
+            // Load the items for the newly selected board
+            loadAllItems();
         }
     }
 }

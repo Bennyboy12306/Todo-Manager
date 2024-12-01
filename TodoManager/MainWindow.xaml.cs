@@ -24,19 +24,22 @@ namespace TodoManager
 
         private int items = 0;
 
-        private bool autoSetBoardSelector = false;
+        private bool autoSettingBoardSelector = true;
+
+        private bool linkSet = false;
         public MainWindow()
         {
             InitializeComponent();
             displayedBoard = manager.ActiveBoard;
             loadAllItems();
             updateBoardSelector();
-            autoSetBoardSelector = true;
+            autoSettingBoardSelector = false;
         }
 
         private void updateBoardSelector()
         {
             cbbBoardSelect.Items.Clear();
+            cbbLinkBoardSelect.Items.Clear();
 
             Dictionary<string, bool> boards = manager.getBoards();
 
@@ -46,6 +49,7 @@ namespace TodoManager
                 bool active = board.Value;
 
                 cbbBoardSelect.Items.Add(boardName);
+                cbbLinkBoardSelect.Items.Add(boardName);
 
                 if (active)
                 {
@@ -71,6 +75,9 @@ namespace TodoManager
 
             // Subscribe to the ItemMoved event
             newTodoItem.ItemMoved += saveAllItems;
+
+            // Subscribe to the LinkButtonClicked event
+            newTodoItem.LinkButtonClicked += linkButton;
 
             // Add the new control to the Todo container
             TodoContainer.Children.Add(newTodoItem);
@@ -153,6 +160,9 @@ namespace TodoManager
 
             // Subscribe to the ItemMoved event
             newTodoItem.ItemMoved += saveAllItems;
+
+            // Subscribe to the LinkButtonClicked event
+            newTodoItem.LinkButtonClicked += linkButton;
 
             Panel targetContainer = ContainerName switch
             {
@@ -261,22 +271,22 @@ namespace TodoManager
 
             manager.addBoard(newBoardName, false);
             manager.saveBoardList();
-            autoSetBoardSelector = false;
+            autoSettingBoardSelector = true;
             updateBoardSelector();
-            autoSetBoardSelector = true;
+            autoSettingBoardSelector = false;
 
             txtError.Content = "";
         }
 
         private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (autoSetBoardSelector)
+            if (!autoSettingBoardSelector)
             {
-                switchActiveBoard();
+                switchActiveBoard(null);
             }
         }
 
-        private void switchActiveBoard()
+        private void switchActiveBoard(string? linkedBoardName)
         {
             saveAllItems();
             TodoContainer.Children.Clear();
@@ -284,11 +294,51 @@ namespace TodoManager
             DoneContainer.Children.Clear();
 
             // Update the active board
-            displayedBoard = cbbBoardSelect.SelectedItem.ToString();
+            if (linkedBoardName != null)
+            {
+                displayedBoard = linkedBoardName;
+                autoSettingBoardSelector = true;
+                cbbBoardSelect.SelectedItem = displayedBoard;
+                autoSettingBoardSelector = false;
+            }
+            else
+            {
+                displayedBoard = cbbBoardSelect.SelectedItem.ToString();
+            }
             manager.markActiveBoard(displayedBoard);
 
             // Load the items for the newly selected board
             loadAllItems();
+        }
+
+        private void cbbLinkModeSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!autoSettingBoardSelector)
+            {
+                linkSet = !linkSet;
+            }
+        }
+
+        private void linkButton(string linkedBoardName)
+        {
+            if (!linkSet)
+            {
+                if (string.IsNullOrWhiteSpace(linkedBoardName))
+                {
+                    txtError.Content = "Error: No linked board set";
+                    return;
+                }
+                if (manager.getBoards().Keys.Contains(linkedBoardName))
+                {
+                    switchActiveBoard(linkedBoardName);
+                    return;
+                }
+                txtError.Content = "Error: Could not find board to open from link";
+            }
+            else
+            {
+                txtError.Content = "ERROR: NOT IMPLEMENTED YET";
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ namespace TodoManager
     {
         public event Action ItemMoved;
 
+        public event Action<String> LinkButtonClicked;
+
         private Point dragStartPoint;
 
         public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(TodoItemControl), new PropertyMetadata(false));
@@ -19,11 +21,11 @@ namespace TodoManager
             set => SetValue(IsEditingProperty, value);
         }
 
-
         private string title;
         private string description;
         private DateTime? startDate;
         private DateTime? endDate;
+        private string linkedBoard;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -68,6 +70,16 @@ namespace TodoManager
             }
         }
 
+        public string LinkedBoard
+        {
+            get => linkedBoard;
+            set
+            {
+                linkedBoard = value;
+                OnPropertyChanged(nameof(LinkedBoard));
+            }
+        }
+
         // References to the parent containers
         public StackPanel TodoContainer { get; set; }
         public StackPanel InProgressContainer { get; set; }
@@ -77,6 +89,7 @@ namespace TodoManager
         {
             InitializeComponent();
             DataContext = this;
+            linkedBoard = "NewBoard"; //Todo remove and make this part of the saved/loaded properties
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -222,6 +235,11 @@ namespace TodoManager
                 // Notify listeners
                 ItemMoved?.Invoke();
             }
+        }
+
+        private void Link_Click(object sender, RoutedEventArgs e)
+        {
+            LinkButtonClicked?.Invoke(LinkedBoard);
         }
     }
 }

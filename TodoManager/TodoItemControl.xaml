@@ -73,7 +73,7 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="MoveUpButt1on" Content="↑" Grid.Column="0" VerticalAlignment="Top" Click="MoveUp_Click" BorderBrush="#FF610000" Background="#FF323232" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
+            <Button x:Name="LinkBoardButton" Content="🔗" Grid.Column="0" VerticalAlignment="Top" Click="Link_Click" BorderBrush="#FF610000" Background="#FF323232" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
 
             <Button x:Name="MoveLeftButton" Content="←" Grid.Column="0" VerticalAlignment="Center" Click="MoveLeft_Click" BorderBrush="#FF610000" Background="#FF323232" Foreground="White" Style="{DynamicResource ButtonStyle}"/>
 

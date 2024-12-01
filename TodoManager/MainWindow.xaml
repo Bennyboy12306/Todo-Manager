@@ -1,13 +1,15 @@
-﻿<Window x:Class="TodoManager.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" xmlns:System="clr-namespace:System;assembly=System.Runtime" x:Class="TodoManager.MainWindow"
         Title="Todo Manager"
         ResizeMode="NoResize"
         Width="1920"
         Height="1080"
         SizeToContent="WidthAndHeight"
         
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+    >
     <Grid Width="1920" Height="1080" Background="#FF8D8D8D">
         <Rectangle HorizontalAlignment="Center" Height="200" VerticalAlignment="Top" Width="1920">
             <Rectangle.Fill>
@@ -65,8 +67,7 @@
 
             <ScrollViewer x:Name="TodoScrollViewer" Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
               DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
-                <StackPanel x:Name="TodoContainer" VerticalAlignment="Top">
-                </StackPanel>
+                <StackPanel x:Name="TodoContainer" VerticalAlignment="Top"/>
             </ScrollViewer>
 
             <Rectangle Grid.Column="2" HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
@@ -82,8 +83,7 @@
 
             <ScrollViewer x:Name="InProgressScrollViewer" Grid.Column="3" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
               DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
-                <StackPanel x:Name="InProgressContainer" VerticalAlignment="Top">
-                </StackPanel>
+                <StackPanel x:Name="InProgressContainer" VerticalAlignment="Top"/>
             </ScrollViewer>
 
             <Rectangle Grid.Column="4" HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
@@ -99,8 +99,7 @@
 
             <ScrollViewer x:Name="DoneScrollViewer" Grid.Column="5" VerticalScrollBarVisibility="Auto" Margin="10" AllowDrop="True"
               DragEnter="Column_DragEnter" DragOver="Column_DragOver" Drop="Column_Drop" DragLeave="Column_DragLeave">
-                <StackPanel x:Name="DoneContainer" VerticalAlignment="Top">
-                </StackPanel>
+                <StackPanel x:Name="DoneContainer" VerticalAlignment="Top"/>
             </ScrollViewer>
 
             <Rectangle Grid.Column="6" HorizontalAlignment="Center" Height="780" VerticalAlignment="Center" Width="30">
@@ -176,10 +175,17 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="170,30,0,0" VerticalAlignment="Top" Width="460" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
+        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="156,30,0,0" VerticalAlignment="Top" Width="474" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
         <Label Content="Active Board:" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
-        <TextBox x:Name="NewBoardNameText" HorizontalAlignment="Left" Margin="841,30,0,0" TextWrapping="Wrap" Text="NewBoard" VerticalAlignment="Top" Width="313" FontSize="20" Height="40" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="NewBoardNameText" HorizontalAlignment="Left" Margin="830,30,0,0" TextWrapping="Wrap" Text="NewBoard" VerticalAlignment="Top" Width="324" FontSize="20" Height="40" VerticalContentAlignment="Center"/>
         <Label Content="New Board Name:" HorizontalAlignment="Left" Margin="660,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
         <Label x:Name="txtError" Content="" HorizontalAlignment="Left" Margin="1292,998,0,0" VerticalAlignment="Top" FontSize="20" Foreground="Red" Height="40"/>
+        <ComboBox x:Name="cbbLinkBoardSelect" HorizontalAlignment="Left" Margin="1398,30,0,0" VerticalAlignment="Top" Width="300" Height="40" FontSize="20"/>
+        <Label Content="Link Board:" HorizontalAlignment="Left" Margin="1290,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
+        <ComboBox x:Name="cbbLinkModeSelect" HorizontalAlignment="Left" Margin="1810,30,0,0" VerticalAlignment="Top" Width="80" Height="40" FontSize="20" SelectedIndex="0" SelectionChanged="cbbLinkModeSelect_SelectionChanged">
+            <System:String>Open</System:String>
+            <System:String>Set</System:String>
+        </ComboBox>
+        <Label Content="Link Mode:" HorizontalAlignment="Left" Margin="1703,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
     </Grid>
 </Window>

@@ -24,14 +24,14 @@ namespace TodoManager
 
         private int items = 0;
 
-        private bool startupFinished = false;
+        private bool autoSetBoardSelector = false;
         public MainWindow()
         {
             InitializeComponent();
             displayedBoard = manager.ActiveBoard;
             loadAllItems();
             updateBoardSelector();
-            startupFinished = true;
+            autoSetBoardSelector = true;
         }
 
         private void updateBoardSelector()
@@ -239,14 +239,38 @@ namespace TodoManager
 
         private void btnAddBoard_Click(object sender, RoutedEventArgs e)
         {
-            manager.addBoard("Temp", false);
+            string newBoardName = NewBoardNameText.Text;
+
+            if (manager.getBoards().ContainsKey(newBoardName))
+            {
+                txtError.Content = "Error: A board with this name already exists.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(" "))
+            {
+                txtError.Content = "Error: Board names cannot be empty or contain a space.";
+                return;
+            }
+
+            if (newBoardName.Equals("Boards"))
+            {
+                txtError.Content = "Error: This name is not allowed.";
+                return;
+            }
+
+            manager.addBoard(newBoardName, false);
             manager.saveBoardList();
+            autoSetBoardSelector = false;
             updateBoardSelector();
+            autoSetBoardSelector = true;
+
+            txtError.Content = "";
         }
 
         private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (startupFinished)
+            if (autoSetBoardSelector)
             {
                 switchActiveBoard();
             }

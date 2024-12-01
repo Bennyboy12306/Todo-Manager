@@ -154,9 +154,9 @@
             Content="Add New Board"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Margin="1289,988,0,0"
-            Width="600"
-            Height="50"
+            Margin="1159,30,0,0"
+            Width="101"
+            Height="40"
             Click="btnAddBoard_Click"
             Foreground="White">
             <Button.Template>
@@ -176,6 +176,10 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" Width="300" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
+        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="170,30,0,0" VerticalAlignment="Top" Width="460" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
+        <Label Content="Active Board:" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
+        <TextBox x:Name="NewBoardNameText" HorizontalAlignment="Left" Margin="841,30,0,0" TextWrapping="Wrap" Text="NewBoard" VerticalAlignment="Top" Width="313" FontSize="20" Height="40" VerticalContentAlignment="Center"/>
+        <Label Content="New Board Name:" HorizontalAlignment="Left" Margin="660,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
+        <Label x:Name="txtError" Content="" HorizontalAlignment="Left" Margin="1292,998,0,0" VerticalAlignment="Top" FontSize="20" Foreground="Red" Height="40"/>
     </Grid>
 </Window>

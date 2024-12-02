@@ -89,7 +89,6 @@ namespace TodoManager
         {
             InitializeComponent();
             DataContext = this;
-            linkedBoard = "NewBoard"; //Todo remove and make this part of the saved/loaded properties
         }
 
         protected void OnPropertyChanged(string propertyName)

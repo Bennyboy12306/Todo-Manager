@@ -98,7 +98,7 @@ namespace TodoManager
                 if (child is TodoItemControl todoItem)
                 {
                     string endDateFormatted = todoItem.EndDate?.ToString() ?? "Ongoing";
-                    writer.WriteLine(containerName + "," + todoItem.Title + "," + todoItem.Description + "," + todoItem.StartDate + "," + endDateFormatted);
+                    writer.WriteLine(containerName + "," + todoItem.Title + "," + todoItem.Description + "," + todoItem.StartDate + "," + endDateFormatted + "," + todoItem.LinkedBoard);
                 }
             }
         }
@@ -120,22 +120,23 @@ namespace TodoManager
                 while ((line = reader.ReadLine()) != null)
                 {
                     string[] parts = line.Split(",");
-                    if (parts.Length == 5)
+                    if (parts.Length == 6)
                     {
                         string containerName = parts[0];
                         string title = parts[1];
                         string description = parts[2];
                         DateTime startDate = DateTime.Parse(parts[3]);
                         DateTime? endDate = parts[4] == "Ongoing" ? (DateTime?)null : DateTime.Parse(parts[4]);
+                        string linkedBoard = parts[5];
 
-                        loadContainerContents(containerName, title, description, startDate, endDate);
+                        loadContainerContents(containerName, title, description, startDate, endDate, linkedBoard);
                     }
                 }
             }
 
         }
 
-        private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate)
+        private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate, string linkedBoard)
         {
 
             TodoItemControl newTodoItem = new TodoItemControl
@@ -144,6 +145,7 @@ namespace TodoManager
                 Description = description,
                 StartDate = startDate,
                 EndDate = endDate,
+                LinkedBoard = linkedBoard,
                 TodoContainer = TodoContainer,
                 InProgressContainer = InProgressContainer,
                 DoneContainer = DoneContainer

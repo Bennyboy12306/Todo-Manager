@@ -53,8 +53,7 @@
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\TodoItemControl.xaml",
               "RelativeToolTip": "TodoManager\\TodoItemControl.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-30T23:41:57.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T23:41:57.136Z"
             },
             {
               "$type": "Document",
@@ -66,8 +65,7 @@
               "RelativeToolTip": "TodoManager\\src\\Details.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T22:20:28.246Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-17T22:20:28.246Z"
             },
             {
               "$type": "Document",
@@ -79,8 +77,7 @@
               "RelativeToolTip": "TodoManager\\src\\Item.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T22:19:46.782Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-17T22:19:46.782Z"
             },
             {
               "$type": "Document",
@@ -91,8 +88,7 @@
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\App.xaml",
               "RelativeToolTip": "TodoManager\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-17T21:37:45.235Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-17T21:37:45.235Z"
             },
             {
               "$type": "Document",
@@ -103,8 +99,7 @@
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\MainWindow.xaml",
               "RelativeToolTip": "TodoManager\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-17T21:29:36.964Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-17T21:29:36.964Z"
             },
             {
               "$type": "Document",
@@ -114,7 +109,7 @@
               "RelativeDocumentMoniker": "TodoManager\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\MainWindow.xaml.cs",
               "RelativeToolTip": "TodoManager\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAPkAAAAAAAAAAAAYwBkBAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAMwHoAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T21:29:34.812Z",
               "EditorCaption": ""
@@ -127,7 +122,7 @@
               "RelativeDocumentMoniker": "TodoManager\\TodoItemControl.xaml.cs",
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\TodoItemControl.xaml.cs",
               "RelativeToolTip": "TodoManager\\TodoItemControl.xaml.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAwFsAAABlAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFsAAABlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-24T23:38:58.927Z",
               "EditorCaption": ""
@@ -142,8 +137,7 @@
               "RelativeToolTip": "TodoManager\\src\\RootManager.cs",
               "ViewState": "AgIAACAAAAAAAAAAAIAwwFcAAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T21:30:46.706Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-17T21:30:46.706Z"
             }
           ]
         }

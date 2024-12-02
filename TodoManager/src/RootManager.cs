@@ -20,7 +20,8 @@ namespace TodoManager.src
 
         public string ActiveBoard
         { 
-            get { return activeBoard; } 
+            get { return activeBoard; }
+            set { activeBoard = value; }
         }
 
         public Dictionary<string, bool> getBoards()
@@ -86,6 +87,7 @@ namespace TodoManager.src
         {
             boards[activeBoard] = false; // Reset old active boards active value
             boards[newActiveBoard] = true; // Set new active boards active value
+            activeBoard = newActiveBoard;
             saveBoardList(); // Save boards list
         }
     }

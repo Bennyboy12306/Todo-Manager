@@ -9,7 +9,7 @@ namespace TodoManager
     {
         public event Action ItemMoved;
 
-        public event Action<String> LinkButtonClicked;
+        public event Action<String, TodoItemControl> LinkButtonClicked;
 
         private Point dragStartPoint;
 
@@ -238,7 +238,7 @@ namespace TodoManager
 
         private void Link_Click(object sender, RoutedEventArgs e)
         {
-            LinkButtonClicked?.Invoke(LinkedBoard);
+            LinkButtonClicked?.Invoke(LinkedBoard, this);
         }
     }
 }

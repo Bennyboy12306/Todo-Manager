@@ -312,7 +312,7 @@ namespace TodoManager
             }
         }
 
-        private void linkButton(string linkedBoardName)
+        private void linkButton(string linkedBoardName, TodoItemControl todoItem)
         {
             if (!linkSet)
             {
@@ -330,7 +330,7 @@ namespace TodoManager
             }
             else
             {
-                txtError.Content = "ERROR: NOT IMPLEMENTED YET";
+                todoItem.LinkedBoard = cbbLinkBoardSelect.Text;
             }
         }
     }

@@ -246,22 +246,19 @@ namespace TodoManager
 
             if (manager.getBoards().ContainsKey(newBoardName))
             {
-                txtInfo.Foreground = Brushes.Red;
-                txtInfo.Content = "Error: A board with this name already exists.";
+                sendLog("Error: A board with this name already exists", true);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(" "))
             {
-                txtInfo.Foreground = Brushes.Red;
-                txtInfo.Content = "Error: Board names cannot be empty or contain a space.";
+                sendLog("Error: Board names cannot be empty or contain a space", true);
                 return;
             }
 
             if (newBoardName.Equals("Boards"))
             {
-                txtInfo.Foreground = Brushes.Red;
-                txtInfo.Content = "Error: This name is not allowed.";
+                sendLog("Error: This name is not allowed", true);
                 return;
             }
 
@@ -271,8 +268,7 @@ namespace TodoManager
             updateBoardSelector();
             autoSettingBoardSelector = false;
 
-            txtInfo.Foreground = Brushes.White;
-            txtInfo.Content = "Added new board: " + newBoardName;
+            sendLog("Added new board: " + newBoardName, false);
         }
 
         private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -304,8 +300,7 @@ namespace TodoManager
             }
             manager.markActiveBoard(displayedBoard);
 
-            txtInfo.Foreground = Brushes.White;
-            txtInfo.Content = "Switched active board to: " + displayedBoard;
+            sendLog("Switched active board to: " + displayedBoard, false);
 
             // Load the items for the newly selected board
             loadAllItems();
@@ -325,26 +320,35 @@ namespace TodoManager
             {
                 if (string.IsNullOrWhiteSpace(linkedBoardName))
                 {
-                    txtInfo.Foreground = Brushes.Red;
-                    txtInfo.Content = "Error: No linked board set";
+                    sendLog("Error: No linked board set", true);
                     return;
                 }
                 if (manager.getBoards().Keys.Contains(linkedBoardName))
                 {
                     switchActiveBoard(linkedBoardName);
-                    txtInfo.Foreground = Brushes.White;
-                    txtInfo.Content = "Opened: " + linkedBoardName + " from link";
+                    sendLog("Opened: " + linkedBoardName + " from link", false);
                     return;
                 }
-                txtInfo.Foreground = Brushes.Red;
-                txtInfo.Content = "Error: Could not find board to open from link";
+                sendLog("Error: Could not find board to open from link", true);
             }
             else
             {
                 todoItem.LinkedBoard = cbbLinkBoardSelect.Text;
-                txtInfo.Foreground = Brushes.White;
-                txtInfo.Content = "Linked item to: " + cbbLinkBoardSelect.Text + " board";
+                sendLog("Linked item to: " + cbbLinkBoardSelect.Text + " board", false);
             }
+        }
+
+        private void sendLog(string message, bool error)
+        {
+            if (error)
+            {
+                txtInfo.Foreground = Brushes.Red;
+            }
+            else
+            {
+                txtInfo.Foreground = Brushes.White;
+            }
+            txtInfo.Content = message;
         }
     }
 }

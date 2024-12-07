@@ -179,7 +179,7 @@
         <Label Content="Active Board:" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
         <TextBox x:Name="NewBoardNameText" HorizontalAlignment="Left" Margin="830,30,0,0" TextWrapping="Wrap" Text="NewBoard" VerticalAlignment="Top" Width="324" FontSize="20" Height="40" VerticalContentAlignment="Center"/>
         <Label Content="New Board Name:" HorizontalAlignment="Left" Margin="660,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
-        <Label x:Name="txtError" Content="" HorizontalAlignment="Left" Margin="1292,998,0,0" VerticalAlignment="Top" FontSize="20" Foreground="Red" Height="40"/>
+        <Label x:Name="txtInfo" Content="" HorizontalAlignment="Left" Margin="1292,998,0,0" VerticalAlignment="Top" FontSize="20" Height="40"/>
         <ComboBox x:Name="cbbLinkBoardSelect" HorizontalAlignment="Left" Margin="1398,30,0,0" VerticalAlignment="Top" Width="300" Height="40" FontSize="20"/>
         <Label Content="Link Board:" HorizontalAlignment="Left" Margin="1290,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
         <ComboBox x:Name="cbbLinkModeSelect" HorizontalAlignment="Left" Margin="1810,30,0,0" VerticalAlignment="Top" Width="80" Height="40" FontSize="20" SelectedIndex="0" SelectionChanged="cbbLinkModeSelect_SelectionChanged">

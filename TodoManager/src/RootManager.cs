@@ -91,14 +91,23 @@ namespace TodoManager.src
 
         public void markActiveBoard(string newActiveBoard, bool deletion)
         {
-            boards[activeBoard] = false; // Reset old active boards active value
-            boards[newActiveBoard] = true; // Set new active boards active value
-            activeBoard = newActiveBoard;
-            
-            if (!deletion) //This fixes a bug where deleted items are added back into the Boards.csv but introduces a bug where root is marked as active but this is not saved
+            Console.WriteLine($"Marking '{newActiveBoard}' as active. Deletion: {deletion}");
+
+            // Update the active status in memory
+            if (boards.ContainsKey(activeBoard))
             {
-                saveBoardList(); // Save boards list
+                boards[activeBoard] = false; // Reset the old active board
             }
+
+            if (boards.ContainsKey(newActiveBoard))
+            {
+                boards[newActiveBoard] = true; // Set the new active board
+            }
+
+            activeBoard = newActiveBoard;
+
+            // Save the updated board list, regardless of deletion
+            saveBoardList();
         }
     }
 }

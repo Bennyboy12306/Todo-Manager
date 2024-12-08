@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 
 namespace TodoManager.src
 {
@@ -32,6 +33,11 @@ namespace TodoManager.src
         public void addBoard(string name, bool active)
         {
             boards[name] = active;
+        }
+
+        public void deleteBoard(string name)
+        {
+            boards.Remove(name);
         }
 
         public void saveBoardList()
@@ -83,12 +89,16 @@ namespace TodoManager.src
 
         }
 
-        public void markActiveBoard(string newActiveBoard)
+        public void markActiveBoard(string newActiveBoard, bool deletion)
         {
             boards[activeBoard] = false; // Reset old active boards active value
             boards[newActiveBoard] = true; // Set new active boards active value
             activeBoard = newActiveBoard;
-            saveBoardList(); // Save boards list
+            
+            if (!deletion) //This fixes a bug where deleted items are added back into the Boards.csv but introduces a bug where root is marked as active but this is not saved
+            {
+                saveBoardList(); // Save boards list
+            }
         }
     }
 }

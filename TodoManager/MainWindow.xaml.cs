@@ -240,6 +240,32 @@ namespace TodoManager
             }
         }
 
+        private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = displayedBoard + ".csv"; // Specify the file name
+            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+
+            if (displayedBoard.Equals("Root"))
+            {
+                // TODO Delete and Recreate Root
+                sendLog("Error: Cannot delete root board", true);
+                return;
+            }
+
+            File.Delete(path);
+            manager.deleteBoard(displayedBoard);
+
+            autoSettingBoardSelector = true;
+            updateBoardSelector();
+            autoSettingBoardSelector = false;
+
+            manager.saveBoardList();
+
+            switchActiveBoard("Root", true);
+
+            sendLog("Deleted: " + displayedBoard, false);
+        }
+
         private void btnAddBoard_Click(object sender, RoutedEventArgs e)
         {
             string newBoardName = NewBoardNameText.Text;
@@ -275,13 +301,16 @@ namespace TodoManager
         {
             if (!autoSettingBoardSelector)
             {
-                switchActiveBoard(null);
+                switchActiveBoard(null, false);
             }
         }
 
-        private void switchActiveBoard(string? linkedBoardName)
+        private void switchActiveBoard(string? linkedBoardName, bool deletion)
         {
-            saveAllItems();
+            if (!deletion)
+            {
+                saveAllItems();
+            }
             TodoContainer.Children.Clear();
             InProgressContainer.Children.Clear();
             DoneContainer.Children.Clear();
@@ -298,7 +327,7 @@ namespace TodoManager
             {
                 displayedBoard = cbbBoardSelect.SelectedItem.ToString();
             }
-            manager.markActiveBoard(displayedBoard);
+            manager.markActiveBoard(displayedBoard, deletion);
 
             sendLog("Switched active board to: " + displayedBoard, false);
 
@@ -325,7 +354,7 @@ namespace TodoManager
                 }
                 if (manager.getBoards().Keys.Contains(linkedBoardName))
                 {
-                    switchActiveBoard(linkedBoardName);
+                    switchActiveBoard(linkedBoardName, false);
                     sendLog("Opened: " + linkedBoardName + " from link", false);
                     return;
                 }

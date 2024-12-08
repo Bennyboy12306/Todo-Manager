@@ -175,7 +175,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="156,30,0,0" VerticalAlignment="Top" Width="474" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
+        <ComboBox x:Name="cbbBoardSelect" HorizontalAlignment="Left" Margin="156,30,0,0" VerticalAlignment="Top" Width="330" Height="40" SelectionChanged="cbbBoardSelect_SelectionChanged" FontSize="20"/>
         <Label Content="Active Board:" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
         <TextBox x:Name="NewBoardNameText" HorizontalAlignment="Left" Margin="830,30,0,0" TextWrapping="Wrap" Text="NewBoard" VerticalAlignment="Top" Width="324" FontSize="20" Height="40" VerticalContentAlignment="Center"/>
         <Label Content="New Board Name:" HorizontalAlignment="Left" Margin="660,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
@@ -187,5 +187,31 @@
             <System:String>Set</System:String>
         </ComboBox>
         <Label Content="Link Mode:" HorizontalAlignment="Left" Margin="1703,30,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
+        <Button x:Name="btnDeleteBoard"
+            Content="Delete Active Board"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="491,30,0,0"
+            Width="139"
+            Height="40"
+            Click="btnDeleteBoard_Click"
+            Foreground="White">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" Background="#FF8D8D8D"
+                        CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="#333333" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Window>

@@ -247,8 +247,11 @@ namespace TodoManager
 
             if (displayedBoard.Equals("Root"))
             {
-                // TODO Delete and Recreate Root
-                sendLog("Error: Cannot delete root board", true);
+                TodoContainer.Children.Clear();
+                InProgressContainer.Children.Clear();
+                DoneContainer.Children.Clear();
+                saveAllItems();
+                sendLog("Cannot delete root board, Clearing items instead", false);
                 return;
             }
 

@@ -201,7 +201,7 @@ namespace TodoManager
             if (Parent is StackPanel container)
             {
                 int currentIndex = container.Children.IndexOf(this);
-                if (currentIndex > 1) // Prevent moving above the header
+                if (currentIndex > 0)
                 {
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex - 1, this);

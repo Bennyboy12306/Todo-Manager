@@ -10,7 +10,7 @@ namespace TodoManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private src.RootManager manager = new src.RootManager();
+        private src.BoardManager manager = new src.BoardManager();
         private string displayedBoard;
 
         private int items = 0;
@@ -133,7 +133,6 @@ namespace TodoManager
                     }
                 }
             }
-
         }
 
         private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate, string linkedBoard)

@@ -3,12 +3,12 @@ using System.IO;
 
 namespace TodoManager.src
 {
-    internal class RootManager
+    internal class BoardManager
     {
         private Dictionary<string, bool> boards = new Dictionary<string, bool>();
         private string activeBoard = string.Empty;
 
-        public RootManager() 
+        public BoardManager() 
         {
             loadBoards();
             if (boards.Count == 0) //Add Root Board if no boards are loaded

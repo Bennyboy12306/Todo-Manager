@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.IO;
+using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace TodoManager
 {
@@ -10,6 +12,8 @@ namespace TodoManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string saveDirectory;
+
         private src.BoardManager manager = new src.BoardManager();
         private string displayedBoard;
 
@@ -21,10 +25,83 @@ namespace TodoManager
         public MainWindow()
         {
             InitializeComponent();
+
+            LoadConfig();
+
+            manager.loadBoards();
+
             displayedBoard = manager.ActiveBoard;
             loadAllItems();
             updateBoardSelector();
             autoSettingBoardSelector = false;
+        }
+
+        private void LoadConfig()
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = Path.Combine(appDataPath, "TodoManager");
+            string configFile = Path.Combine(appFolder, "config.txt");
+
+            try
+            {
+                if (File.Exists(configFile))
+                {
+                    // Read the file and return its contents as the file path
+                    string directory = File.ReadAllText(configFile).Trim(); // Trim to remove extra whitespace or newlines
+                    txtFileLocation.Text = directory;
+                    manager.SaveDirectory = directory;
+                    saveDirectory = directory;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error loading configuration: " + ex.Message);
+            }
+        }
+
+        private void SaveConfig(string content)
+        {
+
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = Path.Combine(appDataPath, "TodoManager");
+            string configFile = Path.Combine(appFolder, "config.txt");
+
+            try
+            {
+                string directory = Path.GetDirectoryName(configFile);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory); // Ensure the directory exists
+                }
+
+                // If it does not end in a backslash add one
+                if (!content.EndsWith("\\"))
+                {
+                    content += "\\";
+                }
+
+                // Write the file path to the configuration file
+                txtFileLocation.Text = content;
+                saveDirectory = content;
+
+                TodoContainer.Children.Clear();
+                InProgressContainer.Children.Clear();
+                DoneContainer.Children.Clear();
+
+                manager.reset(content);
+
+                loadAllItems();
+
+                //TODO Fix sometimes data gets pulled from one root to another when switching directory
+
+                updateBoardSelector();
+                File.WriteAllText(configFile, content);
+                Debug.WriteLine("Configuration saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error saving configuration: " + ex.Message);
+            }
         }
 
         private void updateBoardSelector()
@@ -81,7 +158,7 @@ namespace TodoManager
         private void saveAllItems()
         {
             string fileName = displayedBoard + ".csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = saveDirectory + fileName; // Specify the output path (change as needed)
 
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -242,7 +319,7 @@ namespace TodoManager
         private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
         {
             string fileName = displayedBoard + ".csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = saveDirectory + fileName; // Specify the output path (change as needed)
 
             if (displayedBoard.Equals("Root"))
             {
@@ -327,7 +404,7 @@ namespace TodoManager
             }
             else
             {
-                displayedBoard = cbbBoardSelect.SelectedItem.ToString();
+                displayedBoard = cbbBoardSelect.SelectedItem != null ? cbbBoardSelect.SelectedItem.ToString() : "Root";
             }
             manager.markActiveBoard(displayedBoard, deletion);
 
@@ -380,6 +457,27 @@ namespace TodoManager
                 txtInfo.Foreground = Brushes.White;
             }
             txtInfo.Content = message;
+        }
+
+        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            // Create an OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Set to validate paths and not require a file selection
+            openFileDialog.ValidateNames = false; // Allow selecting folders
+            openFileDialog.CheckFileExists = false; // Do not check if file exists
+            openFileDialog.CheckPathExists = true; // Ensure path exists
+            openFileDialog.FileName = "Select Folder"; // Set default file name as a placeholder
+
+            // Show the dialog and get result
+            if (openFileDialog.ShowDialog() == true) // Returns true if the user selects a location
+            {
+                // Extract the folder path
+                string selectedFolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                MessageBox.Show($"You selected: {selectedFolderPath}");
+                SaveConfig(selectedFolderPath);
+            }
         }
     }
 }

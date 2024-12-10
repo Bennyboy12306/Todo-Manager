@@ -5,29 +5,33 @@ namespace TodoManager.src
 {
     internal class BoardManager
     {
+        private string saveDirectory;
+
         private Dictionary<string, bool> boards = new Dictionary<string, bool>();
         private string activeBoard = string.Empty;
 
-        public BoardManager() 
+        public string SaveDirectory
         {
-            loadBoards();
-            if (boards.Count == 0) //Add Root Board if no boards are loaded
-            {
-                addBoard("Root", true);
-                saveBoardList();
-                activeBoard = "Root";
-            }
-        }
-
-        public string ActiveBoard
-        { 
-            get { return activeBoard; }
-            set { activeBoard = value; }
+            set { saveDirectory = value; }
         }
 
         public Dictionary<string, bool> getBoards()
         {
             return boards; 
+        }
+
+        public string ActiveBoard
+        {
+            get { return activeBoard; }
+            set { activeBoard = value; }
+        }
+
+        public void reset(string newSaveDirectory)
+        {
+            saveDirectory = newSaveDirectory;
+            boards.Clear();
+            activeBoard = string.Empty;
+            loadBoards();
         }
 
         public void addBoard(string name, bool active)
@@ -42,8 +46,7 @@ namespace TodoManager.src
 
         public void saveBoardList()
         {
-            string fileName = "Boards.csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = saveDirectory + "Boards.csv";
 
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -56,11 +59,9 @@ namespace TodoManager.src
             }
         }
 
-        private void loadBoards()
+        public void loadBoards()
         {
-
-            string fileName = "Boards.csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = saveDirectory + "Boards.csv";
 
             if (!File.Exists(path))
             {
@@ -85,8 +86,13 @@ namespace TodoManager.src
                     }
                 }
             }
-            saveBoardList();
 
+            if (boards.Count == 0) //Add Root Board if no boards are loaded
+            {
+                addBoard("Root", true);
+                activeBoard = "Root";
+                saveBoardList();
+            }
         }
 
         public void markActiveBoard(string newActiveBoard, bool deletion)

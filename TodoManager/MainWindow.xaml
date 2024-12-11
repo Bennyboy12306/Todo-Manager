@@ -213,5 +213,33 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <Button x:Name="btnBrowse"
+            Content="Browse"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="1159,994,0,0"
+            Width="101"
+            Height="40"
+            Click="btnBrowse_Click"
+            Foreground="White">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" Background="#FF8D8D8D"
+                        CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="#333333" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBox x:Name="txtFileLocation" HorizontalAlignment="Left" Margin="785,994,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="369" FontSize="20" Height="40" VerticalContentAlignment="Center" IsReadOnly="True"/>
+        <Label Content="File Location:" HorizontalAlignment="Left" Margin="660,994,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" Height="40"/>
     </Grid>
 </Window>

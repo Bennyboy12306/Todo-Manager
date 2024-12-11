@@ -11,12 +11,12 @@
       "RelativeMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|solutionrelative:todomanager\\src\\boardmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|c:\\users\\bengi\\desktop\\projects\\todomanager\\todomanager\\todoitemcontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|solutionrelative:todomanager\\todoitemcontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|c:\\users\\bengi\\desktop\\projects\\todomanager\\todomanager\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|solutionrelative:todomanager\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|c:\\users\\bengi\\desktop\\projects\\todomanager\\todomanager\\todoitemcontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|solutionrelative:todomanager\\todoitemcontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9E56FB17-4170-4222-846A-ED6BBC53982A}|TodoManager\\TodoManager.csproj|c:\\users\\bengi\\desktop\\projects\\todomanager\\todomanager\\todoitemcontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -56,18 +56,20 @@
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\App.xaml",
               "RelativeToolTip": "TodoManager\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-17T21:37:45.235Z"
+              "WhenOpened": "2024-11-17T21:37:45.235Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\MainWindow.xaml",
               "RelativeDocumentMoniker": "TodoManager\\MainWindow.xaml",
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\MainWindow.xaml",
               "RelativeToolTip": "TodoManager\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-17T21:29:36.964Z"
+              "WhenOpened": "2024-11-17T21:29:36.964Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -77,7 +79,7 @@
               "RelativeDocumentMoniker": "TodoManager\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\MainWindow.xaml.cs",
               "RelativeToolTip": "TodoManager\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAqwIgAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAALQBAAAAAAAAAAAUwOoBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T21:29:34.812Z",
               "EditorCaption": ""
@@ -90,14 +92,14 @@
               "RelativeDocumentMoniker": "TodoManager\\src\\BoardManager.cs",
               "ToolTip": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\src\\BoardManager.cs",
               "RelativeToolTip": "TodoManager\\src\\BoardManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAqwEYAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T21:30:46.706Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "TodoItemControl.xaml.cs",
               "DocumentMoniker": "C:\\Users\\bengi\\Desktop\\Projects\\TodoManager\\TodoManager\\TodoItemControl.xaml.cs",
               "RelativeDocumentMoniker": "TodoManager\\TodoItemControl.xaml.cs",

@@ -2,6 +2,9 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.IO;
+using Microsoft.Win32;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace TodoManager
 {
@@ -10,6 +13,7 @@ namespace TodoManager
     /// </summary>
     public partial class MainWindow : Window
     {
+
         private src.BoardManager manager = new src.BoardManager();
         private string displayedBoard;
 
@@ -21,6 +25,8 @@ namespace TodoManager
         public MainWindow()
         {
             InitializeComponent();
+            LoadConfig();
+
             displayedBoard = manager.ActiveBoard;
             loadAllItems();
             updateBoardSelector();
@@ -81,7 +87,7 @@ namespace TodoManager
         private void saveAllItems()
         {
             string fileName = displayedBoard + ".csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
 
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -107,7 +113,7 @@ namespace TodoManager
         {
 
             string fileName = displayedBoard + ".csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
 
             if (!File.Exists(path))
             {
@@ -242,7 +248,7 @@ namespace TodoManager
         private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
         {
             string fileName = displayedBoard + ".csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
 
             if (displayedBoard.Equals("Root"))
             {
@@ -380,6 +386,108 @@ namespace TodoManager
                 txtInfo.Foreground = Brushes.White;
             }
             txtInfo.Content = message;
+        }
+
+        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            // Create an OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Set to validate paths and not require a file selection
+            openFileDialog.ValidateNames = false; // Allow selecting folders
+            openFileDialog.CheckFileExists = false; // Do not check if file exists
+            openFileDialog.CheckPathExists = true; // Ensure path exists
+            openFileDialog.FileName = "Select Folder"; // Set default file name as a placeholder
+
+            // Show the dialog and get result
+            if (openFileDialog.ShowDialog() == true) // Returns true if the user selects a location
+            {
+                // Extract the folder path
+                string selectedFolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                MessageBox.Show($"You selected: {selectedFolderPath}");
+                SaveConfig(selectedFolderPath);
+            }
+        }
+        private void LoadConfig()
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = Path.Combine(appDataPath, "TodoManager");
+            string configFile = Path.Combine(appFolder, "config.txt");
+
+            try
+            {
+                if (File.Exists(configFile))
+                {
+                    // Read the file and return its contents as the file path
+                    string directory = File.ReadAllText(configFile).Trim(); // Trim to remove extra whitespace or newlines
+                    txtFileLocation.Text = directory;
+                    manager.SaveDirectory = directory;
+                }
+                else
+                {
+                    SaveConfig("None"); //Save a blank config file
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error loading configuration: " + ex.Message);
+            }
+        }
+
+        private void SaveConfig(string content)
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = Path.Combine(appDataPath, "TodoManager");
+            string configFile = Path.Combine(appFolder, "config.txt");
+
+            try
+            {
+                // Ensure the parent directory (appFolder) exists
+                if (!Directory.Exists(appFolder))
+                {
+                    Directory.CreateDirectory(appFolder);
+                }
+
+                // Add a trailing backslash to the content if not present
+                if (!content.EndsWith("\\"))
+                {
+                    content += "\\";
+                }
+
+                // Write the file path to the configuration file
+                File.WriteAllText(configFile, content);
+
+                txtFileLocation.Text = content;
+                Debug.WriteLine("Configuration saved successfully.");
+                RestartApplication();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error saving configuration: " + ex.Message);
+            }
+        }
+
+        public static void RestartApplication()
+        {
+            try
+            {
+                // Get the full path to the currently running executable
+                string executablePath = Process.GetCurrentProcess().MainModule.FileName;
+
+                // Start a new instance of the application
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = executablePath,
+                    UseShellExecute = true, // Use shell execution to start the process
+                });
+
+                // Exit the current application
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error restarting application: " + ex.Message);
+            }
         }
     }
 }

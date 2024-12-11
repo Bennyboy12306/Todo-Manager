@@ -5,6 +5,8 @@ namespace TodoManager.src
 {
     internal class BoardManager
     {
+        private string saveDirectory;
+
         private Dictionary<string, bool> boards = new Dictionary<string, bool>();
         private string activeBoard = string.Empty;
 
@@ -17,6 +19,12 @@ namespace TodoManager.src
                 saveBoardList();
                 activeBoard = "Root";
             }
+        }
+
+        public string SaveDirectory
+        {
+            get { return saveDirectory; }
+            set { saveDirectory = value; }
         }
 
         public string ActiveBoard
@@ -43,7 +51,7 @@ namespace TodoManager.src
         public void saveBoardList()
         {
             string fileName = "Boards.csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = saveDirectory + fileName; // Specify the output path (change as needed)
 
             using (StreamWriter writer = new StreamWriter(path))
             {
@@ -60,7 +68,7 @@ namespace TodoManager.src
         {
 
             string fileName = "Boards.csv"; // Specify the file name
-            string path = @"D:\" + fileName; // Specify the output path (change as needed)
+            string path = saveDirectory + fileName; // Specify the output path (change as needed)
 
             if (!File.Exists(path))
             {

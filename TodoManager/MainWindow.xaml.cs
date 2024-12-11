@@ -27,7 +27,10 @@ namespace TodoManager
             InitializeComponent();
             LoadConfig();
 
+            manager.initialLoad();
+
             displayedBoard = manager.ActiveBoard;
+
             loadAllItems();
             updateBoardSelector();
             autoSettingBoardSelector = false;

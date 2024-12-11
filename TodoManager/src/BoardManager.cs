@@ -10,17 +10,6 @@ namespace TodoManager.src
         private Dictionary<string, bool> boards = new Dictionary<string, bool>();
         private string activeBoard = string.Empty;
 
-        public BoardManager() 
-        {
-            loadBoards();
-            if (boards.Count == 0) //Add Root Board if no boards are loaded
-            {
-                addBoard("Root", true);
-                saveBoardList();
-                activeBoard = "Root";
-            }
-        }
-
         public string SaveDirectory
         {
             get { return saveDirectory; }
@@ -36,6 +25,17 @@ namespace TodoManager.src
         public Dictionary<string, bool> getBoards()
         {
             return boards; 
+        }
+
+        public void initialLoad()
+        {
+            loadBoards();
+            if (boards.Count == 0) //Add Root Board if no boards are loaded
+            {
+                addBoard("Root", true);
+                saveBoardList();
+                activeBoard = "Root";
+            }
         }
 
         public void addBoard(string name, bool active)

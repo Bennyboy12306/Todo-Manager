@@ -27,8 +27,10 @@ namespace TodoManager
             InitializeComponent();
             LoadConfig();
 
-            //Todo fix initial load tries to load even with default "None\" Path
-            manager.initialLoad();
+            if (!manager.SaveDirectory.Equals("None\\"))
+            {
+                manager.initialLoad();
+            }
 
             displayedBoard = manager.ActiveBoard;
 

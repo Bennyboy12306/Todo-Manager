@@ -27,6 +27,7 @@ namespace TodoManager
             InitializeComponent();
             LoadConfig();
 
+            //Todo fix initial load tries to load even with default "None\" Path
             manager.initialLoad();
 
             displayedBoard = manager.ActiveBoard;
@@ -73,8 +74,8 @@ namespace TodoManager
                 EndDate = null
             };
 
-            // Subscribe to the ItemMoved event
-            newTodoItem.ItemMoved += saveAllItems;
+            // Subscribe to the ItemChanged event
+            newTodoItem.ItemChanged += saveAllItems;
 
             // Subscribe to the LinkButtonClicked event
             newTodoItem.LinkButtonClicked += linkButton;
@@ -159,8 +160,8 @@ namespace TodoManager
                 DoneContainer = DoneContainer
             };
 
-            // Subscribe to the ItemMoved event
-            newTodoItem.ItemMoved += saveAllItems;
+            // Subscribe to the ItemChanged event
+            newTodoItem.ItemChanged += saveAllItems;
 
             // Subscribe to the LinkButtonClicked event
             newTodoItem.LinkButtonClicked += linkButton;

@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace TodoManager
 {
-    public partial class TodoItemControl : UserControl, INotifyPropertyChanged
+    public partial class TodoItemControl : UserControl
     {
-        public event Action ItemMoved;
+        public event Action ItemChanged;
 
         public event Action<String, TodoItemControl> LinkButtonClicked;
 
@@ -27,47 +27,45 @@ namespace TodoManager
         private DateTime? endDate;
         private string linkedBoard;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         // Public properties for binding
         public string Title
         {
             get => title;
             set
-            {
-                title = value;
-                OnPropertyChanged(nameof(Title));
+                {
+                    title = value;
+                    ItemChanged?.Invoke();
+                }
             }
-        }
 
         public string Description
         {
             get => description;
             set
-            {
-                description = value;
-                OnPropertyChanged(nameof(Description));
-            }
+                {
+                    description = value;
+                    ItemChanged?.Invoke();
+                }
         }
 
         public DateTime? StartDate
         {
             get => startDate;
             set
-            {
-                startDate = value;
-                OnPropertyChanged(nameof(StartDate));
-            }
+                {
+                    startDate = value;
+                    ItemChanged?.Invoke();
+                }
         }
 
         public DateTime? EndDate
         {
             get => endDate;
             set
-            {
-                endDate = value;
-                OnPropertyChanged(nameof(EndDate));
-            }
+                {
+                    endDate = value;
+                    ItemChanged?.Invoke();
+                }
         }
 
         public string LinkedBoard
@@ -76,8 +74,8 @@ namespace TodoManager
             set
             {
                 linkedBoard = value;
-                OnPropertyChanged(nameof(LinkedBoard));
-            }
+                ItemChanged?.Invoke();
+            }                
         }
 
         // References to the parent containers
@@ -89,11 +87,6 @@ namespace TodoManager
         {
             InitializeComponent();
             DataContext = this;
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void Column_Drop(object sender, DragEventArgs e)
@@ -164,7 +157,7 @@ namespace TodoManager
                 InProgressContainer.Children.Remove(this);
                 TodoContainer.Children.Add(this);
                 // Notify listeners
-                ItemMoved?.Invoke();
+                ItemChanged?.Invoke();
             }
             else if (this.Parent == DoneContainer)
             {
@@ -172,7 +165,7 @@ namespace TodoManager
                 DoneContainer.Children.Remove(this);
                 InProgressContainer.Children.Add(this);
                 // Notify listeners
-                ItemMoved?.Invoke();
+                ItemChanged?.Invoke();
             }
         }
 
@@ -184,7 +177,7 @@ namespace TodoManager
                 TodoContainer.Children.Remove(this);
                 InProgressContainer.Children.Add(this);
                 // Notify listeners
-                ItemMoved?.Invoke();
+                ItemChanged?.Invoke();
             }
             else if (this.Parent == InProgressContainer)
             {
@@ -192,7 +185,7 @@ namespace TodoManager
                 InProgressContainer.Children.Remove(this);
                 DoneContainer.Children.Add(this);
                 // Notify listeners
-                ItemMoved?.Invoke();
+                ItemChanged?.Invoke();
             }
         }
 
@@ -206,7 +199,7 @@ namespace TodoManager
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex - 1, this);
                     // Notify listeners
-                    ItemMoved?.Invoke();
+                    ItemChanged?.Invoke();
                 }
             }
         }
@@ -221,7 +214,7 @@ namespace TodoManager
                     container.Children.Remove(this);
                     container.Children.Insert(currentIndex + 1, this);
                     // Notify listeners
-                    ItemMoved?.Invoke();
+                    ItemChanged?.Invoke();
                 }
             }
         }
@@ -232,7 +225,7 @@ namespace TodoManager
             {
                 container.Children.Remove(this);
                 // Notify listeners
-                ItemMoved?.Invoke();
+                ItemChanged?.Invoke();
             }
         }
 

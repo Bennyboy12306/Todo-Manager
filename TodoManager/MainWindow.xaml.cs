@@ -64,30 +64,37 @@ namespace TodoManager
 
         private void btnAddTodo_Click(object sender, RoutedEventArgs e)
         {
-            // Create a new TodoItemControl instance
-            TodoItemControl newTodoItem = new TodoItemControl
+            if (!manager.SaveDirectory.Equals("None\\"))
             {
-                Title = "New Todo Item " + items,
-                Description = "Description of the item",
-                TodoContainer = TodoContainer,
-                InProgressContainer = InProgressContainer,
-                DoneContainer = DoneContainer,
-                StartDate = DateTime.Now,
-                EndDate = null
-            };
+                // Create a new TodoItemControl instance
+                TodoItemControl newTodoItem = new TodoItemControl
+                {
+                    Title = "New Todo Item " + items,
+                    Description = "Description of the item",
+                    TodoContainer = TodoContainer,
+                    InProgressContainer = InProgressContainer,
+                    DoneContainer = DoneContainer,
+                    StartDate = DateTime.Now,
+                    EndDate = null
+                };
 
-            // Subscribe to the ItemChanged event
-            newTodoItem.ItemChanged += saveAllItems;
+                // Subscribe to the ItemChanged event
+                newTodoItem.ItemChanged += saveAllItems;
 
-            // Subscribe to the LinkButtonClicked event
-            newTodoItem.LinkButtonClicked += linkButton;
+                // Subscribe to the LinkButtonClicked event
+                newTodoItem.LinkButtonClicked += linkButton;
 
-            // Add the new control to the Todo container
-            TodoContainer.Children.Add(newTodoItem);
+                // Add the new control to the Todo container
+                TodoContainer.Children.Add(newTodoItem);
 
-            saveAllItems();
+                saveAllItems();
 
-            items++;
+                items++;
+            }
+            else
+            {
+                sendLog("Error: Please set a file location first.", true);
+            }
         }
 
         private void saveAllItems()
@@ -253,62 +260,76 @@ namespace TodoManager
 
         private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
         {
-            string fileName = displayedBoard + ".csv"; // Specify the file name
-            string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
-
-            if (displayedBoard.Equals("Root"))
+            if (!manager.SaveDirectory.Equals("None\\"))
             {
-                TodoContainer.Children.Clear();
-                InProgressContainer.Children.Clear();
-                DoneContainer.Children.Clear();
-                saveAllItems();
-                sendLog("Cannot delete root board, Clearing items instead", false);
-                return;
+                string fileName = displayedBoard + ".csv"; // Specify the file name
+                string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
+
+                if (displayedBoard.Equals("Root"))
+                {
+                    TodoContainer.Children.Clear();
+                    InProgressContainer.Children.Clear();
+                    DoneContainer.Children.Clear();
+                    saveAllItems();
+                    sendLog("Cannot delete root board, Clearing items instead", false);
+                    return;
+                }
+
+                File.Delete(path);
+                manager.deleteBoard(displayedBoard);
+
+                autoSettingBoardSelector = true;
+                updateBoardSelector();
+                autoSettingBoardSelector = false;
+
+                manager.saveBoardList();
+
+                switchActiveBoard("Root", true);
+
+                sendLog("Deleted: " + displayedBoard, false);
             }
-
-            File.Delete(path);
-            manager.deleteBoard(displayedBoard);
-
-            autoSettingBoardSelector = true;
-            updateBoardSelector();
-            autoSettingBoardSelector = false;
-
-            manager.saveBoardList();
-
-            switchActiveBoard("Root", true);
-
-            sendLog("Deleted: " + displayedBoard, false);
+            else
+            {
+                sendLog("Error: Please set a file location first.", true);
+            }
         }
 
         private void btnAddBoard_Click(object sender, RoutedEventArgs e)
         {
-            string newBoardName = NewBoardNameText.Text;
-
-            if (manager.getBoards().ContainsKey(newBoardName))
+            if (!manager.SaveDirectory.Equals("None\\"))
             {
-                sendLog("Error: A board with this name already exists", true);
-                return;
-            }
+                string newBoardName = NewBoardNameText.Text;
 
-            if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(" "))
+                if (manager.getBoards().ContainsKey(newBoardName))
+                {
+                    sendLog("Error: A board with this name already exists", true);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(" "))
+                {
+                    sendLog("Error: Board names cannot be empty or contain a space", true);
+                    return;
+                }
+
+                if (newBoardName.Equals("Boards"))
+                {
+                    sendLog("Error: This name is not allowed", true);
+                    return;
+                }
+
+                manager.addBoard(newBoardName, false);
+                manager.saveBoardList();
+                autoSettingBoardSelector = true;
+                updateBoardSelector();
+                autoSettingBoardSelector = false;
+
+                sendLog("Added new board: " + newBoardName, false);
+            }
+            else
             {
-                sendLog("Error: Board names cannot be empty or contain a space", true);
-                return;
+                sendLog("Error: Please set a file location first.", true);
             }
-
-            if (newBoardName.Equals("Boards"))
-            {
-                sendLog("Error: This name is not allowed", true);
-                return;
-            }
-
-            manager.addBoard(newBoardName, false);
-            manager.saveBoardList();
-            autoSettingBoardSelector = true;
-            updateBoardSelector();
-            autoSettingBoardSelector = false;
-
-            sendLog("Added new board: " + newBoardName, false);
         }
 
         private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)

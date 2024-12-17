@@ -245,7 +245,7 @@ namespace TodoManager
         }
 
         /// <summary>
-        /// This method 
+        /// This method updates the cursor based on whether or not moving the item is allowed
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
@@ -438,7 +438,7 @@ namespace TodoManager
                 displayedBoard = cbbBoardSelect.SelectedItem.ToString();
             }
             // Mark the active board on the manager
-            manager.markActiveBoard(displayedBoard, deletion);
+            manager.markActiveBoard(displayedBoard);
 
             sendLog("Switched active board to: " + displayedBoard, false);
 

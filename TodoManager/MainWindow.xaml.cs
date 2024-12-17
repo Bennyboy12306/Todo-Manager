@@ -39,6 +39,9 @@ namespace TodoManager
             autoSettingBoardSelector = false;
         }
 
+        /// <summary>
+        /// This method updates the board and link board selector combobox with the available boards
+        /// </summary>
         private void updateBoardSelector()
         {
             cbbBoardSelect.Items.Clear();
@@ -62,6 +65,11 @@ namespace TodoManager
             
         }
 
+        /// <summary>
+        /// This method creates a new todo item, adds it into the todo column and then saves when the button is clicked
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void btnAddTodo_Click(object sender, RoutedEventArgs e)
         {
             if (!manager.SaveDirectory.Equals("None\\"))
@@ -78,7 +86,7 @@ namespace TodoManager
                     EndDate = null
                 };
 
-                // Subscribe to the ItemChanged event
+                // Subscribe to the ItemChanged event (Will cause items to be saved any time one is updated)
                 newTodoItem.ItemChanged += saveAllItems;
 
                 // Subscribe to the LinkButtonClicked event
@@ -97,6 +105,9 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method saves all of the items from each container
+        /// </summary>
         private void saveAllItems()
         {
             string fileName = displayedBoard + ".csv"; // Specify the file name
@@ -110,6 +121,12 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles saving items in a specific container
+        /// </summary>
+        /// <param name="container">The container to save items from</param>
+        /// <param name="containerName">The name of the container to save items from</param>
+        /// <param name="writer">The stream writer object</param>
         private void saveContainerContents(Panel container, string containerName, StreamWriter writer)
         {
             foreach (var child in container.Children)
@@ -122,6 +139,9 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method loads all of the items from each container
+        /// </summary>
         private void loadAllItems()
         {
 
@@ -154,6 +174,15 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles loading items from a specific container
+        /// </summary>
+        /// <param name="ContainerName">The name of the container to load</param>
+        /// <param name="title">The items title</param>
+        /// <param name="description">The items description</param>
+        /// <param name="startDate">The items start date</param>
+        /// <param name="endDate">The items end date</param>
+        /// <param name="linkedBoard">The items linked board</param>
         private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate, string linkedBoard)
         {
 
@@ -169,7 +198,7 @@ namespace TodoManager
                 DoneContainer = DoneContainer
             };
 
-            // Subscribe to the ItemChanged event
+            // Subscribe to the ItemChanged event (Will cause items to be saved any time one is updated)
             newTodoItem.ItemChanged += saveAllItems;
 
             // Subscribe to the LinkButtonClicked event
@@ -187,9 +216,13 @@ namespace TodoManager
             {
                 targetContainer.Children.Add(newTodoItem);
             }
-
         }
 
+        /// <summary>
+        /// This method changes the background color of a container when an item is dragged over it
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void Column_DragEnter(object sender, DragEventArgs e)
         {
             if (sender is ScrollViewer column)
@@ -198,6 +231,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method resets the background color of a container back after an item is dragged out from this container
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void Column_DragLeave(object sender, DragEventArgs e)
         {
             if (sender is ScrollViewer column)
@@ -206,7 +244,11 @@ namespace TodoManager
             }
         }
 
-
+        /// <summary>
+        /// This method 
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void Column_DragOver(object sender, DragEventArgs e)
         {
             // Allow moving the item if it is valid
@@ -220,6 +262,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles dropping an item into a new column
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void Column_Drop(object sender, DragEventArgs e)
         {
             if (sender is ScrollViewer column)
@@ -258,6 +305,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles deleting a board when the button is clicked (Root just gets cleared instead of deleted)
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
         {
             if (!manager.SaveDirectory.Equals("None\\"))
@@ -265,6 +317,7 @@ namespace TodoManager
                 string fileName = displayedBoard + ".csv"; // Specify the file name
                 string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
 
+                // If the board is the root board just clear it and save the empty file
                 if (displayedBoard.Equals("Root"))
                 {
                     TodoContainer.Children.Clear();
@@ -275,6 +328,7 @@ namespace TodoManager
                     return;
                 }
 
+                // Otherwise delete the file, update the board selectors then switch the active board back to the root board
                 File.Delete(path);
                 manager.deleteBoard(displayedBoard);
 
@@ -294,30 +348,39 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles adding a new board when the button is clicked (Boards must have unique names that are not empty and do not contain a space, The name "boards" is used for storing a list of all the boards so trying to make a board with this name is not allowed)
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void btnAddBoard_Click(object sender, RoutedEventArgs e)
         {
             if (!manager.SaveDirectory.Equals("None\\"))
             {
                 string newBoardName = NewBoardNameText.Text;
 
+                // Ensure board name is unique
                 if (manager.getBoards().ContainsKey(newBoardName))
                 {
                     sendLog("Error: A board with this name already exists", true);
                     return;
                 }
 
+                // Ensure name is not empty and does not contain a space
                 if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(" "))
                 {
                     sendLog("Error: Board names cannot be empty or contain a space", true);
                     return;
                 }
 
+                // Ensure board name is not "Boards" This is used by the program for storing a list of all available boards
                 if (newBoardName.Equals("Boards"))
                 {
                     sendLog("Error: This name is not allowed", true);
                     return;
                 }
 
+                // If program reaches this point, all above checks have passed so add the new board
                 manager.addBoard(newBoardName, false);
                 manager.saveBoardList();
                 autoSettingBoardSelector = true;
@@ -332,6 +395,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles switching the active board when the combobox selection is changed
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!autoSettingBoardSelector)
@@ -340,17 +408,24 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles switching the active board
+        /// </summary>
+        /// <param name="linkedBoardName">The name of the linked board if we are switching to it</param>
+        /// <param name="deletion">If we are switching after deleting a board</param>
         private void switchActiveBoard(string? linkedBoardName, bool deletion)
         {
+            // As long as we have not just deleted a board save all the items
             if (!deletion)
             {
                 saveAllItems();
             }
+            // Clear all the containers
             TodoContainer.Children.Clear();
             InProgressContainer.Children.Clear();
             DoneContainer.Children.Clear();
 
-            // Update the active board
+            // Update the active board, If we have a linked board set that to be active, otherwise set the item from the combobox board select to be active
             if (linkedBoardName != null)
             {
                 displayedBoard = linkedBoardName;
@@ -362,6 +437,7 @@ namespace TodoManager
             {
                 displayedBoard = cbbBoardSelect.SelectedItem.ToString();
             }
+            // Mark the active board on the manager
             manager.markActiveBoard(displayedBoard, deletion);
 
             sendLog("Switched active board to: " + displayedBoard, false);
@@ -370,6 +446,11 @@ namespace TodoManager
             loadAllItems();
         }
 
+        /// <summary>
+        /// This method switches which link mode we are in when the combobox selection is changed
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void cbbLinkModeSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!autoSettingBoardSelector)
@@ -378,15 +459,23 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles opening or setting a link on an item, when the button is clicked
+        /// </summary>
+        /// <param name="linkedBoardName">The name of the linked board</param>
+        /// <param name="todoItem">The item object</param>
         private void linkButton(string linkedBoardName, TodoItemControl todoItem)
         {
+            // If linkSet is false we are opening a link
             if (!linkSet)
             {
+                // Ensure the linked board name is not null or whitespace
                 if (string.IsNullOrWhiteSpace(linkedBoardName))
                 {
                     sendLog("Error: No linked board set", true);
                     return;
                 }
+                // Ensure the board we are trying to link to exists, if so open it
                 if (manager.getBoards().Keys.Contains(linkedBoardName))
                 {
                     switchActiveBoard(linkedBoardName, false);
@@ -395,15 +484,23 @@ namespace TodoManager
                 }
                 sendLog("Error: Could not find board to open from link", true);
             }
+            // If linkSet is true we are linking a board
             else
             {
+                // Set the linked board on the item
                 todoItem.LinkedBoard = cbbLinkBoardSelect.Text;
                 sendLog("Linked item to: " + cbbLinkBoardSelect.Text + " board", false);
             }
         }
 
+        /// <summary>
+        /// This method is a simple logger which is used to output messages to the screen
+        /// </summary>
+        /// <param name="message">The message to output</param>
+        /// <param name="error">If this message is an error or not (Determines text color, White/Red)</param>
         private void sendLog(string message, bool error)
         {
+            // Set the color based on if the message is an error or not
             if (error)
             {
                 txtInfo.Foreground = Brushes.Red;
@@ -412,9 +509,15 @@ namespace TodoManager
             {
                 txtInfo.Foreground = Brushes.White;
             }
+            // Display the message
             txtInfo.Content = message;
         }
 
+        /// <summary>
+        /// This method handles browsing files to choose a save directory when the button is clicked
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             // Create an OpenFileDialog
@@ -435,8 +538,13 @@ namespace TodoManager
                 SaveConfig(selectedFolderPath);
             }
         }
+
+        /// <summary>
+        /// This method handles loading the save directory from the config in app data (This is how the program remembers where to locate your files after restarting)
+        /// </summary>
         private void LoadConfig()
         {
+            // Set up the variables to locate the config file
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appFolder = Path.Combine(appDataPath, "TodoManager");
             string configFile = Path.Combine(appFolder, "config.txt");
@@ -461,8 +569,13 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles saving the save directory to the config in app data
+        /// </summary>
+        /// <param name="content">The contents (save directory path) to save</param>
         private void SaveConfig(string content)
         {
+            // Set up the variables to locate the config file
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appFolder = Path.Combine(appDataPath, "TodoManager");
             string configFile = Path.Combine(appFolder, "config.txt");
@@ -486,6 +599,8 @@ namespace TodoManager
 
                 txtFileLocation.Text = content;
                 Debug.WriteLine("Configuration saved successfully.");
+
+                // Once we have changed the config and saved it, it is easier to just restart the program rather than try to save and unload all of the current data to load up the data from the new file path
                 RestartApplication();
             }
             catch (Exception ex)
@@ -494,6 +609,10 @@ namespace TodoManager
             }
         }
 
+
+        /// <summary>
+        /// This method handles restarting the application after the save directory has changed
+        /// </summary>
         public static void RestartApplication()
         {
             try

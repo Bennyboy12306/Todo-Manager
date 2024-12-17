@@ -22,6 +22,10 @@ namespace TodoManager
         private bool autoSettingBoardSelector = true;
 
         private bool linkSet = false;
+
+        /// <summary>
+        /// Constructor, Initializes component loads the config gets the active board and displays it, loading all the items then updates the board selectors
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

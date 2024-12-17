@@ -15,6 +15,9 @@ namespace TodoManager
 
         public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(TodoItemControl), new PropertyMetadata(false));
 
+        /// <summary>
+        /// This method gets and sets is editing
+        /// </summary>
         public bool IsEditing
         {
             get => (bool)GetValue(IsEditingProperty);
@@ -27,7 +30,9 @@ namespace TodoManager
         private DateTime? endDate;
         private string linkedBoard;
 
-        // Public properties for binding
+        /// <summary>
+        /// This method gets and sets title
+        /// </summary>
         public string Title
         {
             get => title;
@@ -38,6 +43,9 @@ namespace TodoManager
                 }
             }
 
+        /// <summary>
+        /// This method gets and sets description
+        /// </summary>
         public string Description
         {
             get => description;
@@ -48,6 +56,9 @@ namespace TodoManager
                 }
         }
 
+        /// <summary>
+        /// This method gets and sets start date
+        /// </summary>
         public DateTime? StartDate
         {
             get => startDate;
@@ -58,6 +69,9 @@ namespace TodoManager
                 }
         }
 
+        /// <summary>
+        /// This method gets and sets end date
+        /// </summary>
         public DateTime? EndDate
         {
             get => endDate;
@@ -68,6 +82,9 @@ namespace TodoManager
                 }
         }
 
+        /// <summary>
+        /// This method gets and sets linked board
+        /// </summary>
         public string LinkedBoard
         {
             get => linkedBoard;
@@ -83,33 +100,20 @@ namespace TodoManager
         public StackPanel InProgressContainer { get; set; }
         public StackPanel DoneContainer { get; set; }
 
+        /// <summary>
+        /// Constructor, Initializes component and sets data context
+        /// </summary>
         public TodoItemControl()
         {
             InitializeComponent();
             DataContext = this;
         }
 
-        private void Column_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(TodoItemControl)))
-            {
-                TodoItemControl draggedItem = (TodoItemControl)e.Data.GetData(typeof(TodoItemControl));
-
-                // Remove from the current container
-                if (draggedItem.Parent is StackPanel currentContainer)
-                {
-                    currentContainer.Children.Remove(draggedItem);
-                }
-
-                // Add to the new container
-                if (((ScrollViewer)sender).Content is StackPanel targetContainer)
-                {
-                    targetContainer.Children.Add(draggedItem);
-                }
-            }
-        }
-
-        // Record the start point on mouse down
+        /// <summary>
+        /// This method records the start point on mouse down for the drag operation
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -118,21 +122,37 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles setting is editing to true when an editable part of the item gains focus
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void GotFocus(object sender, RoutedEventArgs e)
         {
             IsEditing = true; // User is editing
         }
 
+        /// <summary>
+        /// This method handles setting is editing to true when an editable part of the item loses focus
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void LostFocus(object sender, RoutedEventArgs e)
         {
             IsEditing = false; // User finished editing
         }
 
-        // Start the drag-and-drop operation on mouse move
+        /// <summary>
+        /// This method handles starting the drag drop operation when the mouse moves
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
+            // If the user is editing prevent drag drop operation
             if (IsEditing) return;
 
+            // Ensure the user is also holding down the left mouse button
             if (e.LeftButton == MouseButtonState.Pressed)
             {
 
@@ -149,6 +169,11 @@ namespace TodoManager
         }
 
 
+        /// <summary>
+        /// This method handles moving the item to the container on its left when the button is clicked
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void MoveLeft_Click(object sender, RoutedEventArgs e)
         {
             if (this.Parent == InProgressContainer)
@@ -169,6 +194,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles moving the item to the container on its right when the button is clicked
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void MoveRight_Click(object sender, RoutedEventArgs e)
         {
             if (this.Parent == TodoContainer)
@@ -189,6 +219,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles moving the item up in the container it is currently in
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void MoveUp_Click(object sender, RoutedEventArgs e)
         {
             if (Parent is StackPanel container)
@@ -204,6 +239,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles moving the item down in the container it is currently in
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void MoveDown_Click(object sender, RoutedEventArgs e)
         {
             if (Parent is StackPanel container)
@@ -219,6 +259,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles deleting an item
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (Parent is StackPanel container)
@@ -229,6 +274,11 @@ namespace TodoManager
             }
         }
 
+        /// <summary>
+        /// This method handles calling the link method on the main window class when the button is clicked
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">Event args</param>
         private void Link_Click(object sender, RoutedEventArgs e)
         {
             LinkButtonClicked?.Invoke(LinkedBoard, this);

@@ -7,33 +7,37 @@ namespace TodoManager
 {
     public partial class TodoItemControl : UserControl
     {
-        public event Action ItemChanged;
+        public event Action? ItemChanged;
 
-        public event Action<String, TodoItemControl> LinkButtonClicked;
+        public event Action<String?, TodoItemControl>? LinkButtonClicked;
 
         private Point dragStartPoint;
 
-        public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(TodoItemControl), new PropertyMetadata(false));
+        private bool isEditing;
 
         /// <summary>
         /// This method gets and sets is editing
         /// </summary>
         public bool IsEditing
         {
-            get => (bool)GetValue(IsEditingProperty);
-            set => SetValue(IsEditingProperty, value);
+            get => isEditing;
+            set => isEditing = value;
         }
 
-        private string title;
-        private string description;
+        private string? title;
+        private string? description;
         private DateTime? startDate;
         private DateTime? endDate;
-        private string linkedBoard;
+        private string? linkedBoard;
+
+        private StackPanel todoContainer;
+        private StackPanel inProgressContainer;
+        private StackPanel doneContainer;
 
         /// <summary>
         /// This method gets and sets title
         /// </summary>
-        public string Title
+        public string? Title
         {
             get => title;
             set
@@ -46,7 +50,7 @@ namespace TodoManager
         /// <summary>
         /// This method gets and sets description
         /// </summary>
-        public string Description
+        public string? Description
         {
             get => description;
             set
@@ -85,7 +89,7 @@ namespace TodoManager
         /// <summary>
         /// This method gets and sets linked board
         /// </summary>
-        public string LinkedBoard
+        public string? LinkedBoard
         {
             get => linkedBoard;
             set
@@ -95,18 +99,17 @@ namespace TodoManager
             }                
         }
 
-        // References to the parent containers
-        public StackPanel TodoContainer { get; set; }
-        public StackPanel InProgressContainer { get; set; }
-        public StackPanel DoneContainer { get; set; }
-
         /// <summary>
         /// Constructor, Initializes component and sets data context
         /// </summary>
-        public TodoItemControl()
+        public TodoItemControl(StackPanel todoContainer, StackPanel inProgressContainer, StackPanel doneContainer)
         {
             InitializeComponent();
             DataContext = this;
+
+            this.todoContainer = todoContainer;
+            this.inProgressContainer = inProgressContainer;
+            this.doneContainer = doneContainer;
         }
 
         /// <summary>
@@ -127,7 +130,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void GotFocus(object sender, RoutedEventArgs e)
+        private new void GotFocus(object sender, RoutedEventArgs e)
         {
             IsEditing = true; // User is editing
         }
@@ -137,7 +140,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void LostFocus(object sender, RoutedEventArgs e)
+        private new void LostFocus(object sender, RoutedEventArgs e)
         {
             IsEditing = false; // User finished editing
         }
@@ -176,19 +179,19 @@ namespace TodoManager
         /// <param name="e">Event args</param>
         private void MoveLeft_Click(object sender, RoutedEventArgs e)
         {
-            if (this.Parent == InProgressContainer)
+            if (this.Parent == inProgressContainer)
             {
                 // Move to Todo
-                InProgressContainer.Children.Remove(this);
-                TodoContainer.Children.Add(this);
+                inProgressContainer.Children.Remove(this);
+                todoContainer!.Children.Add(this);
                 // Notify listeners
                 ItemChanged?.Invoke();
             }
-            else if (this.Parent == DoneContainer)
+            else if (this.Parent == doneContainer)
             {
                 // Move to In Progress
-                DoneContainer.Children.Remove(this);
-                InProgressContainer.Children.Add(this);
+                doneContainer.Children.Remove(this);
+                inProgressContainer!.Children.Add(this);
                 // Notify listeners
                 ItemChanged?.Invoke();
             }
@@ -201,19 +204,19 @@ namespace TodoManager
         /// <param name="e">Event args</param>
         private void MoveRight_Click(object sender, RoutedEventArgs e)
         {
-            if (this.Parent == TodoContainer)
+            if (this.Parent == todoContainer)
             {
                 // Move to In Progress
-                TodoContainer.Children.Remove(this);
-                InProgressContainer.Children.Add(this);
+                todoContainer.Children.Remove(this);
+                inProgressContainer!.Children.Add(this);
                 // Notify listeners
                 ItemChanged?.Invoke();
             }
-            else if (this.Parent == InProgressContainer)
+            else if (this.Parent == inProgressContainer)
             {
                 // Move to Done
-                InProgressContainer.Children.Remove(this);
-                DoneContainer.Children.Add(this);
+                inProgressContainer.Children.Remove(this);
+                doneContainer!.Children.Add(this);
                 // Notify listeners
                 ItemChanged?.Invoke();
             }
@@ -281,7 +284,7 @@ namespace TodoManager
         /// <param name="e">Event args</param>
         private void Link_Click(object sender, RoutedEventArgs e)
         {
-            LinkButtonClicked?.Invoke(LinkedBoard, this);
+            LinkButtonClicked?.Invoke(linkedBoard, this);
         }
     }
 }

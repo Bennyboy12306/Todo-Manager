@@ -31,7 +31,7 @@ namespace TodoManager
             InitializeComponent();
             LoadConfig();
 
-            if (!manager.SaveDirectory.Equals("None\\"))
+            if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
                 manager.initialLoad();
             }
@@ -76,16 +76,13 @@ namespace TodoManager
         /// <param name="e">Event args</param>
         private void btnAddTodo_Click(object sender, RoutedEventArgs e)
         {
-            if (!manager.SaveDirectory.Equals("None\\"))
+            if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
                 // Create a new TodoItemControl instance
-                TodoItemControl newTodoItem = new TodoItemControl
+                TodoItemControl newTodoItem = new TodoItemControl(TodoContainer, InProgressContainer, DoneContainer)
                 {
                     Title = "New Todo Item " + items,
                     Description = "Description of the item",
-                    TodoContainer = TodoContainer,
-                    InProgressContainer = InProgressContainer,
-                    DoneContainer = DoneContainer,
                     StartDate = DateTime.Now,
                     EndDate = null
                 };
@@ -159,7 +156,7 @@ namespace TodoManager
 
             using (StreamReader reader = new StreamReader(path))
             {
-                string line;
+                string? line;
                 while ((line = reader.ReadLine()) != null)
                 {
                     string[] parts = line.Split(",");
@@ -190,16 +187,13 @@ namespace TodoManager
         private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate, string linkedBoard)
         {
 
-            TodoItemControl newTodoItem = new TodoItemControl
+            TodoItemControl newTodoItem = new TodoItemControl(TodoContainer, InProgressContainer, DoneContainer)
             {
                 Title = title,
                 Description = description,
                 StartDate = startDate,
                 EndDate = endDate,
                 LinkedBoard = linkedBoard,
-                TodoContainer = TodoContainer,
-                InProgressContainer = InProgressContainer,
-                DoneContainer = DoneContainer
             };
 
             // Subscribe to the ItemChanged event (Will cause items to be saved any time one is updated)
@@ -208,7 +202,7 @@ namespace TodoManager
             // Subscribe to the LinkButtonClicked event
             newTodoItem.LinkButtonClicked += linkButton;
 
-            Panel targetContainer = ContainerName switch
+            Panel? targetContainer = ContainerName switch
             {
                 "Todo" => TodoContainer,
                 "InProgress" => InProgressContainer,
@@ -316,7 +310,7 @@ namespace TodoManager
         /// <param name="e">Event args</param>
         private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
         {
-            if (!manager.SaveDirectory.Equals("None\\"))
+            if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
                 string fileName = displayedBoard + ".csv"; // Specify the file name
                 string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
@@ -359,7 +353,7 @@ namespace TodoManager
         /// <param name="e">Event args</param>
         private void btnAddBoard_Click(object sender, RoutedEventArgs e)
         {
-            if (!manager.SaveDirectory.Equals("None\\"))
+            if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
                 string newBoardName = NewBoardNameText.Text;
 
@@ -439,7 +433,11 @@ namespace TodoManager
             }
             else
             {
-                displayedBoard = cbbBoardSelect.SelectedItem.ToString();
+                displayedBoard = cbbBoardSelect.SelectedItem.ToString() ?? "";
+                if (displayedBoard == "")
+                {
+                    return;
+                }
             }
             // Mark the active board on the manager
             manager.markActiveBoard(displayedBoard);
@@ -468,7 +466,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="linkedBoardName">The name of the linked board</param>
         /// <param name="todoItem">The item object</param>
-        private void linkButton(string linkedBoardName, TodoItemControl todoItem)
+        private void linkButton(string? linkedBoardName, TodoItemControl todoItem)
         {
             // If linkSet is false we are opening a link
             if (!linkSet)
@@ -537,9 +535,12 @@ namespace TodoManager
             if (openFileDialog.ShowDialog() == true) // Returns true if the user selects a location
             {
                 // Extract the folder path
-                string selectedFolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
-                MessageBox.Show($"You selected: {selectedFolderPath}");
-                SaveConfig(selectedFolderPath);
+                string? selectedFolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                if (selectedFolderPath != null)
+                {
+                    MessageBox.Show($"You selected: {selectedFolderPath}");
+                    SaveConfig(selectedFolderPath);
+                }
             }
         }
 
@@ -622,7 +623,7 @@ namespace TodoManager
             try
             {
                 // Get the full path to the currently running executable
-                string executablePath = Process.GetCurrentProcess().MainModule.FileName;
+                string? executablePath = Environment.ProcessPath;
 
                 // Start a new instance of the application
                 Process.Start(new ProcessStartInfo

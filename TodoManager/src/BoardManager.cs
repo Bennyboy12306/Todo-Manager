@@ -5,7 +5,7 @@ namespace TodoManager.src
 {
     internal class BoardManager
     {
-        private string saveDirectory;
+        private string? saveDirectory;
 
         private Dictionary<string, bool> boards = new Dictionary<string, bool>();
         private string activeBoard = string.Empty;
@@ -13,7 +13,7 @@ namespace TodoManager.src
         /// <summary>
         /// This method gets and sets the save directory
         /// </summary>
-        public string SaveDirectory
+        public string? SaveDirectory
         {
             get { return saveDirectory; }
             set { saveDirectory = value; }
@@ -105,8 +105,8 @@ namespace TodoManager.src
 
             using (StreamReader reader = new StreamReader(path))
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                string? line;
+                while ((line = reader.ReadLine() ?? null) != null)
                 {
                     string[] parts = line.Split(",");
                     if (parts.Length == 2)

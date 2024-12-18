@@ -83,7 +83,7 @@ namespace TodoManager
                 {
                     Title = "New Todo Item " + items,
                     Description = "Description of the item",
-                    StartDate = DateTime.Now,
+                    StartDate = null,
                     EndDate = null
                 };
 
@@ -134,8 +134,9 @@ namespace TodoManager
             {
                 if (child is TodoItemControl todoItem)
                 {
+                    string startDateFormatted = todoItem.StartDate?.ToString() ?? "NotStarted";
                     string endDateFormatted = todoItem.EndDate?.ToString() ?? "Ongoing";
-                    writer.WriteLine(containerName + "," + todoItem.Title + "," + todoItem.Description + "," + todoItem.StartDate + "," + endDateFormatted + "," + todoItem.LinkedBoard);
+                    writer.WriteLine(containerName + "," + todoItem.Title + "," + todoItem.Description + "," + startDateFormatted + "," + endDateFormatted + "," + todoItem.LinkedBoard);
                 }
             }
         }
@@ -165,7 +166,7 @@ namespace TodoManager
                         string containerName = parts[0];
                         string title = parts[1];
                         string description = parts[2];
-                        DateTime startDate = DateTime.Parse(parts[3]);
+                        DateTime? startDate = parts[3] == "NotStarted" ? (DateTime?)null : DateTime.Parse(parts[3]);
                         DateTime? endDate = parts[4] == "Ongoing" ? (DateTime?)null : DateTime.Parse(parts[4]);
                         string linkedBoard = parts[5];
 
@@ -184,7 +185,7 @@ namespace TodoManager
         /// <param name="startDate">The items start date</param>
         /// <param name="endDate">The items end date</param>
         /// <param name="linkedBoard">The items linked board</param>
-        private void loadContainerContents(string ContainerName, string title, string description, DateTime startDate, DateTime? endDate, string linkedBoard)
+        private void loadContainerContents(string ContainerName, string title, string description, DateTime? startDate, DateTime? endDate, string linkedBoard)
         {
 
             TodoItemControl newTodoItem = new TodoItemControl(TodoContainer, InProgressContainer, DoneContainer)

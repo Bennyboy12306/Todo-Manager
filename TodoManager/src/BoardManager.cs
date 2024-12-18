@@ -7,7 +7,7 @@ namespace TodoManager.src
     {
         private string? saveDirectory;
 
-        private Dictionary<string, bool> boards = new Dictionary<string, bool>();
+        private readonly Dictionary<string, bool> boards = [];
         private string activeBoard = string.Empty;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace TodoManager.src
         /// This method gets a dictionary of board names and their active states
         /// </summary>
         /// <returns>A dictionary of board names and their active states</returns>
-        public Dictionary<string, bool> getBoards()
+        public Dictionary<string, bool> GetBoards()
         {
             return boards; 
         }
@@ -40,13 +40,13 @@ namespace TodoManager.src
         /// <summary>
         /// This method handles loading board or adding a root board and setting it to active if no boards exist when the program starts up
         /// </summary>
-        public void initialLoad()
+        public void InitialLoad()
         {
-            loadBoards();
+            LoadBoards();
             if (boards.Count == 0) //Add Root Board if no boards are loaded
             {
-                addBoard("Root", true);
-                saveBoardList();
+                AddBoard("Root", true);
+                SaveBoardList();
                 activeBoard = "Root";
             }
         }
@@ -56,7 +56,7 @@ namespace TodoManager.src
         /// </summary>
         /// <param name="name">The name of the new board</param>
         /// <param name="active">If this board is active or not</param>
-        public void addBoard(string name, bool active)
+        public void AddBoard(string name, bool active)
         {
             boards[name] = active;
         }
@@ -65,7 +65,7 @@ namespace TodoManager.src
         /// This method handles removing a board from the list of active boards
         /// </summary>
         /// <param name="name">The name of the board to remove</param>
-        public void deleteBoard(string name)
+        public void DeleteBoard(string name)
         {
             boards.Remove(name);
         }
@@ -73,26 +73,24 @@ namespace TodoManager.src
         /// <summary>
         /// This method handles saving the list of boards and their active states
         /// </summary>
-        public void saveBoardList()
+        public void SaveBoardList()
         {
             string fileName = "Boards.csv"; // Specify the file name
             string path = saveDirectory + fileName; // Specify the output path (change as needed)
 
-            using (StreamWriter writer = new StreamWriter(path))
+            using StreamWriter writer = new(path);
+            foreach (var board in boards)
             {
-                foreach (var board in boards)
-                {
-                    string name = board.Key;
-                    bool active = board.Value;
-                    writer.WriteLine(name + "," + active);
-                }
+                string name = board.Key;
+                bool active = board.Value;
+                writer.WriteLine(name + "," + active);
             }
         }
 
         /// <summary>
         /// This method handles loading the list of boards from the Boards.csv file and marking the correct board as active
         /// </summary>
-        private void loadBoards()
+        private void LoadBoards()
         {
 
             string fileName = "Boards.csv"; // Specify the file name
@@ -103,7 +101,7 @@ namespace TodoManager.src
                 return;
             }
 
-            using (StreamReader reader = new StreamReader(path))
+            using (StreamReader reader = new(path))
             {
                 string? line;
                 while ((line = reader.ReadLine() ?? null) != null)
@@ -117,11 +115,11 @@ namespace TodoManager.src
                         {
                             activeBoard = boardName;
                         }
-                        addBoard(boardName, activeFormatted);
+                        AddBoard(boardName, activeFormatted);
                     }
                 }
             }
-            saveBoardList();
+            SaveBoardList();
 
         }
 
@@ -129,7 +127,7 @@ namespace TodoManager.src
         /// This method handles marking a board as active
         /// </summary>
         /// <param name="newActiveBoard">The name of the new active board</param>
-        public void markActiveBoard(string newActiveBoard)
+        public void MarkActiveBoard(string newActiveBoard)
         {
 
             // Update the active status in memory
@@ -146,7 +144,7 @@ namespace TodoManager.src
             activeBoard = newActiveBoard;
 
             // Save the updated board list
-            saveBoardList();
+            SaveBoardList();
         }
     }
 }

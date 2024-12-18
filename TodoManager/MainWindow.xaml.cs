@@ -14,7 +14,7 @@ namespace TodoManager
     public partial class MainWindow : Window
     {
 
-        private src.BoardManager manager = new src.BoardManager();
+        private static readonly src.BoardManager manager = new();
         private string displayedBoard;
 
         private int items = 0;
@@ -33,25 +33,25 @@ namespace TodoManager
 
             if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
-                manager.initialLoad();
+                manager.InitialLoad();
             }
 
             displayedBoard = manager.ActiveBoard;
 
-            loadAllItems();
-            updateBoardSelector();
+            LoadAllItems();
+            UpdateBoardSelector();
             autoSettingBoardSelector = false;
         }
 
         /// <summary>
         /// This method updates the board and link board selector combobox with the available boards
         /// </summary>
-        private void updateBoardSelector()
+        private void UpdateBoardSelector()
         {
             cbbBoardSelect.Items.Clear();
             cbbLinkBoardSelect.Items.Clear();
 
-            Dictionary<string, bool> boards = manager.getBoards();
+            Dictionary<string, bool> boards = manager.GetBoards();
 
             foreach (var board in boards)
             {
@@ -74,12 +74,12 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void btnAddTodo_Click(object sender, RoutedEventArgs e)
+        private void BtnAddTodo_Click(object sender, RoutedEventArgs e)
         {
             if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
                 // Create a new TodoItemControl instance
-                TodoItemControl newTodoItem = new TodoItemControl(TodoContainer, InProgressContainer, DoneContainer)
+                TodoItemControl newTodoItem = new(TodoContainer, InProgressContainer, DoneContainer)
                 {
                     Title = "New Todo Item " + items,
                     Description = "Description of the item",
@@ -88,38 +88,36 @@ namespace TodoManager
                 };
 
                 // Subscribe to the ItemChanged event (Will cause items to be saved any time one is updated)
-                newTodoItem.ItemChanged += saveAllItems;
+                newTodoItem.ItemChanged += SaveAllItems;
 
                 // Subscribe to the LinkButtonClicked event
-                newTodoItem.LinkButtonClicked += linkButton;
+                newTodoItem.LinkButtonClicked += LinkButton;
 
                 // Add the new control to the Todo container
                 TodoContainer.Children.Add(newTodoItem);
 
-                saveAllItems();
+                SaveAllItems();
 
                 items++;
             }
             else
             {
-                sendLog("Error: Please set a file location first.", true);
+                SendLog("Error: Please set a file location first.", true);
             }
         }
 
         /// <summary>
         /// This method saves all of the items from each container
         /// </summary>
-        private void saveAllItems()
+        private void SaveAllItems()
         {
             string fileName = displayedBoard + ".csv"; // Specify the file name
             string path = manager.SaveDirectory + fileName; // Specify the output path (change as needed)
 
-            using (StreamWriter writer = new StreamWriter(path))
-            {
-                saveContainerContents(TodoContainer, "Todo", writer);
-                saveContainerContents(InProgressContainer, "InProgress", writer);
-                saveContainerContents(DoneContainer, "Done", writer);
-            }
+            using StreamWriter writer = new(path);
+            SaveContainerContents(TodoContainer, "Todo", writer);
+            SaveContainerContents(InProgressContainer, "InProgress", writer);
+            SaveContainerContents(DoneContainer, "Done", writer);
         }
 
         /// <summary>
@@ -128,7 +126,7 @@ namespace TodoManager
         /// <param name="container">The container to save items from</param>
         /// <param name="containerName">The name of the container to save items from</param>
         /// <param name="writer">The stream writer object</param>
-        private void saveContainerContents(Panel container, string containerName, StreamWriter writer)
+        private static void SaveContainerContents(Panel container, string containerName, StreamWriter writer)
         {
             foreach (var child in container.Children)
             {
@@ -144,7 +142,7 @@ namespace TodoManager
         /// <summary>
         /// This method loads all of the items from each container
         /// </summary>
-        private void loadAllItems()
+        private void LoadAllItems()
         {
 
             string fileName = displayedBoard + ".csv"; // Specify the file name
@@ -155,23 +153,21 @@ namespace TodoManager
                 return;
             }
 
-            using (StreamReader reader = new StreamReader(path))
+            using StreamReader reader = new(path);
+            string? line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
+                string[] parts = line.Split(",");
+                if (parts.Length == 6)
                 {
-                    string[] parts = line.Split(",");
-                    if (parts.Length == 6)
-                    {
-                        string containerName = parts[0];
-                        string title = parts[1];
-                        string description = parts[2];
-                        DateTime? startDate = parts[3] == "NotStarted" ? (DateTime?)null : DateTime.Parse(parts[3]);
-                        DateTime? endDate = parts[4] == "Ongoing" ? (DateTime?)null : DateTime.Parse(parts[4]);
-                        string linkedBoard = parts[5];
+                    string containerName = parts[0];
+                    string title = parts[1];
+                    string description = parts[2];
+                    DateTime? startDate = parts[3] == "NotStarted" ? (DateTime?)null : DateTime.Parse(parts[3]);
+                    DateTime? endDate = parts[4] == "Ongoing" ? (DateTime?)null : DateTime.Parse(parts[4]);
+                    string linkedBoard = parts[5];
 
-                        loadContainerContents(containerName, title, description, startDate, endDate, linkedBoard);
-                    }
+                    LoadContainerContents(containerName, title, description, startDate, endDate, linkedBoard);
                 }
             }
         }
@@ -185,10 +181,10 @@ namespace TodoManager
         /// <param name="startDate">The items start date</param>
         /// <param name="endDate">The items end date</param>
         /// <param name="linkedBoard">The items linked board</param>
-        private void loadContainerContents(string ContainerName, string title, string description, DateTime? startDate, DateTime? endDate, string linkedBoard)
+        private void LoadContainerContents(string ContainerName, string title, string description, DateTime? startDate, DateTime? endDate, string linkedBoard)
         {
 
-            TodoItemControl newTodoItem = new TodoItemControl(TodoContainer, InProgressContainer, DoneContainer)
+            TodoItemControl newTodoItem = new(TodoContainer, InProgressContainer, DoneContainer)
             {
                 Title = title,
                 Description = description,
@@ -198,10 +194,10 @@ namespace TodoManager
             };
 
             // Subscribe to the ItemChanged event (Will cause items to be saved any time one is updated)
-            newTodoItem.ItemChanged += saveAllItems;
+            newTodoItem.ItemChanged += SaveAllItems;
 
             // Subscribe to the LinkButtonClicked event
-            newTodoItem.LinkButtonClicked += linkButton;
+            newTodoItem.LinkButtonClicked += LinkButton;
 
             Panel? targetContainer = ContainerName switch
             {
@@ -211,10 +207,11 @@ namespace TodoManager
                 _ => null
             };
 
-            if (targetContainer != null)
+            if (targetContainer == null)
             {
-                targetContainer.Children.Add(newTodoItem);
+                return;
             }
+            targetContainer.Children.Add(newTodoItem);
         }
 
         /// <summary>
@@ -292,13 +289,12 @@ namespace TodoManager
                         // Remove the dragged item from the current container
                         currentContainer.Children.Remove(draggedItem);
 
-                        Point dropPosition = e.GetPosition(targetContainer);
                         int insertIndex = targetContainer.Children.Count;
 
                         // Insert dragged item into the target container
                         targetContainer.Children.Insert(insertIndex, draggedItem);
 
-                        saveAllItems();
+                        SaveAllItems();
                     }
                 }
             }
@@ -309,7 +305,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void btnDeleteBoard_Click(object sender, RoutedEventArgs e)
+        private void BtnDeleteBoard_Click(object sender, RoutedEventArgs e)
         {
             if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
@@ -322,28 +318,28 @@ namespace TodoManager
                     TodoContainer.Children.Clear();
                     InProgressContainer.Children.Clear();
                     DoneContainer.Children.Clear();
-                    saveAllItems();
-                    sendLog("Cannot delete root board, Clearing items instead", false);
+                    SaveAllItems();
+                    SendLog("Cannot delete root board, Clearing items instead", false);
                     return;
                 }
 
                 // Otherwise delete the file, update the board selectors then switch the active board back to the root board
                 File.Delete(path);
-                manager.deleteBoard(displayedBoard);
+                manager.DeleteBoard(displayedBoard);
 
                 autoSettingBoardSelector = true;
-                updateBoardSelector();
+                UpdateBoardSelector();
                 autoSettingBoardSelector = false;
 
-                manager.saveBoardList();
+                manager.SaveBoardList();
 
-                switchActiveBoard("Root", true);
+                SwitchActiveBoard("Root", true);
 
-                sendLog("Deleted: " + displayedBoard, false);
+                SendLog("Deleted: " + displayedBoard, false);
             }
             else
             {
-                sendLog("Error: Please set a file location first.", true);
+                SendLog("Error: Please set a file location first.", true);
             }
         }
 
@@ -352,45 +348,45 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void btnAddBoard_Click(object sender, RoutedEventArgs e)
+        private void BtnAddBoard_Click(object sender, RoutedEventArgs e)
         {
             if (manager.SaveDirectory != null && !manager.SaveDirectory.Equals("None\\"))
             {
-                string newBoardName = NewBoardNameText.Text;
+                string newBoardName = txtNewBoardName.Text;
 
                 // Ensure board name is unique
-                if (manager.getBoards().ContainsKey(newBoardName))
+                if (manager.GetBoards().ContainsKey(newBoardName))
                 {
-                    sendLog("Error: A board with this name already exists", true);
+                    SendLog("Error: A board with this name already exists", true);
                     return;
                 }
 
                 // Ensure name is not empty and does not contain a space
-                if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(" "))
+                if (string.IsNullOrWhiteSpace(newBoardName) || newBoardName.Contains(' '))
                 {
-                    sendLog("Error: Board names cannot be empty or contain a space", true);
+                    SendLog("Error: Board names cannot be empty or contain a space", true);
                     return;
                 }
 
                 // Ensure board name is not "Boards" This is used by the program for storing a list of all available boards
                 if (newBoardName.Equals("Boards"))
                 {
-                    sendLog("Error: This name is not allowed", true);
+                    SendLog("Error: This name is not allowed", true);
                     return;
                 }
 
                 // If program reaches this point, all above checks have passed so add the new board
-                manager.addBoard(newBoardName, false);
-                manager.saveBoardList();
+                manager.AddBoard(newBoardName, false);
+                manager.SaveBoardList();
                 autoSettingBoardSelector = true;
-                updateBoardSelector();
+                UpdateBoardSelector();
                 autoSettingBoardSelector = false;
 
-                sendLog("Added new board: " + newBoardName, false);
+                SendLog("Added new board: " + newBoardName, false);
             }
             else
             {
-                sendLog("Error: Please set a file location first.", true);
+                SendLog("Error: Please set a file location first.", true);
             }
         }
 
@@ -399,11 +395,11 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void cbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbbBoardSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!autoSettingBoardSelector)
             {
-                switchActiveBoard(null, false);
+                SwitchActiveBoard(null, false);
             }
         }
 
@@ -412,12 +408,12 @@ namespace TodoManager
         /// </summary>
         /// <param name="linkedBoardName">The name of the linked board if we are switching to it</param>
         /// <param name="deletion">If we are switching after deleting a board</param>
-        private void switchActiveBoard(string? linkedBoardName, bool deletion)
+        private void SwitchActiveBoard(string? linkedBoardName, bool deletion)
         {
             // As long as we have not just deleted a board save all the items
             if (!deletion)
             {
-                saveAllItems();
+                SaveAllItems();
             }
             // Clear all the containers
             TodoContainer.Children.Clear();
@@ -441,12 +437,12 @@ namespace TodoManager
                 }
             }
             // Mark the active board on the manager
-            manager.markActiveBoard(displayedBoard);
+            manager.MarkActiveBoard(displayedBoard);
 
-            sendLog("Switched active board to: " + displayedBoard, false);
+            SendLog("Switched active board to: " + displayedBoard, false);
 
             // Load the items for the newly selected board
-            loadAllItems();
+            LoadAllItems();
         }
 
         /// <summary>
@@ -454,7 +450,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void cbbLinkModeSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbbLinkModeSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!autoSettingBoardSelector)
             {
@@ -467,7 +463,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="linkedBoardName">The name of the linked board</param>
         /// <param name="todoItem">The item object</param>
-        private void linkButton(string? linkedBoardName, TodoItemControl todoItem)
+        private void LinkButton(string? linkedBoardName, TodoItemControl todoItem)
         {
             // If linkSet is false we are opening a link
             if (!linkSet)
@@ -475,24 +471,24 @@ namespace TodoManager
                 // Ensure the linked board name is not null or whitespace
                 if (string.IsNullOrWhiteSpace(linkedBoardName))
                 {
-                    sendLog("Error: No linked board set", true);
+                    SendLog("Error: No linked board set", true);
                     return;
                 }
                 // Ensure the board we are trying to link to exists, if so open it
-                if (manager.getBoards().Keys.Contains(linkedBoardName))
+                if (manager.GetBoards().ContainsKey(linkedBoardName))
                 {
-                    switchActiveBoard(linkedBoardName, false);
-                    sendLog("Opened: " + linkedBoardName + " from link", false);
+                    SwitchActiveBoard(linkedBoardName, false);
+                    SendLog("Opened: " + linkedBoardName + " from link", false);
                     return;
                 }
-                sendLog("Error: Could not find board to open from link", true);
+                SendLog("Error: Could not find board to open from link", true);
             }
             // If linkSet is true we are linking a board
             else
             {
                 // Set the linked board on the item
                 todoItem.LinkedBoard = cbbLinkBoardSelect.Text;
-                sendLog("Linked item to: " + cbbLinkBoardSelect.Text + " board", false);
+                SendLog("Linked item to: " + cbbLinkBoardSelect.Text + " board", false);
             }
         }
 
@@ -501,7 +497,7 @@ namespace TodoManager
         /// </summary>
         /// <param name="message">The message to output</param>
         /// <param name="error">If this message is an error or not (Determines text color, White/Red)</param>
-        private void sendLog(string message, bool error)
+        private void SendLog(string message, bool error)
         {
             // Set the color based on if the message is an error or not
             if (error)
@@ -521,16 +517,17 @@ namespace TodoManager
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">Event args</param>
-        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
             // Create an OpenFileDialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            // Set to validate paths and not require a file selection
-            openFileDialog.ValidateNames = false; // Allow selecting folders
-            openFileDialog.CheckFileExists = false; // Do not check if file exists
-            openFileDialog.CheckPathExists = true; // Ensure path exists
-            openFileDialog.FileName = "Select Folder"; // Set default file name as a placeholder
+            OpenFileDialog openFileDialog = new()
+            {
+                // Set to validate paths and not require a file selection
+                ValidateNames = false, // Allow selecting folders
+                CheckFileExists = false, // Do not check if file exists
+                CheckPathExists = true, // Ensure path exists
+                FileName = "Select Folder" // Set default file name as a placeholder
+            };
 
             // Show the dialog and get result
             if (openFileDialog.ShowDialog() == true) // Returns true if the user selects a location
@@ -595,7 +592,7 @@ namespace TodoManager
                 }
 
                 // Add a trailing backslash to the content if not present
-                if (!content.EndsWith("\\"))
+                if (!content.EndsWith('\\'))
                 {
                     content += "\\";
                 }

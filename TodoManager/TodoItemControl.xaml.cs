@@ -30,9 +30,9 @@ namespace TodoManager
         private DateTime? endDate;
         private string? linkedBoard;
 
-        private StackPanel todoContainer;
-        private StackPanel inProgressContainer;
-        private StackPanel doneContainer;
+        private readonly StackPanel todoContainer;
+        private readonly StackPanel inProgressContainer;
+        private readonly StackPanel doneContainer;
 
         /// <summary>
         /// This method gets and sets title

@@ -24,3 +24,6 @@
 - To link an item to a board, first change the link mode to Set and select the board to link to (Located top right), then click the link icon on the item you wish to apply this link to.
 - To open a link, make sure the link mode is set to Open, Then click the link icon on an item.
 - IMPORTANT: Actions or Errors appear in the bottom right, Reading these messages can help assure you something you have done has worked or can let you know where you have went wrong if something has not worked.
+
+![Root Board Example](Images/RootBoardExample.png)
+![Sub Board Example](Images/2024BoardExample.png)
